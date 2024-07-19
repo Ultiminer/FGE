@@ -16,7 +16,7 @@ constexpr FGE_Color operator|(const FGE_Color& a, const FGE_Color& b)
 	const int R=(a.r+b.r);
 	const int G=(a.g+b.g);
 	const int B=(a.b+b.b);
-	return {(Uint8)(R>>1),(Uint8)(G>>1),(Uint8)(B>>1),255}; 
+	return {(uint8_t)(R>>1),(uint8_t)(G>>1),(uint8_t)(B>>1),255}; 
 }
 /*Computes the complementary color*/
 constexpr FGE_Color operator~(const FGE_Color& a)
@@ -24,7 +24,7 @@ constexpr FGE_Color operator~(const FGE_Color& a)
 	const int R=(255-a.r);
 	const int G=(255-a.g);
 	const int B=(255-a.b);
-	return {(Uint8)R,(Uint8)G,(Uint8)B,255}; 
+	return {(uint8_t)R,(uint8_t)G,(uint8_t)B,255}; 
 }
 namespace FGE{
 
@@ -45,7 +45,7 @@ namespace FGE{
 	constexpr FGE_Color darken(const FGE_Color& a, float alpha)
 	{
 	const float complAlpha{1-alpha};
-	return {(Uint8)(a.r*complAlpha),(Uint8)(a.g*complAlpha),(Uint8)(a.b*complAlpha),a.a};
+	return {(uint8_t)(a.r*complAlpha),(uint8_t)(a.g*complAlpha),(uint8_t)(a.b*complAlpha),a.a};
 	}
 	/*moves each RGB value closer to 255 by a percentage of its distance, alpha MUST BE between zero and one*/
 	constexpr FGE_Color lighten(const FGE_Color& a, float alpha)
@@ -54,7 +54,7 @@ namespace FGE{
 	const float gDist{255.f-a.g};
 	const float bDist{255.f-a.b};
 
-	return {(Uint8)(a.r+rDist*alpha),(Uint8)(a.g+gDist*alpha),(Uint8)(a.b+bDist*alpha),a.a};
+	return {(uint8_t)(a.r+rDist*alpha),(uint8_t)(a.g+gDist*alpha),(uint8_t)(a.b+bDist*alpha),a.a};
 	}
 
 

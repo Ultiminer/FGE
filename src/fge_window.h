@@ -3,7 +3,8 @@
 /*
 Sets up an OPENGL CONEXT using SDL2
 */
-
+#include "ext/glew.h"
+#include "ext/glfw3.h"
 #include <cstdint>
 #include "fge_types.h"
 #include <iostream>
@@ -45,65 +46,46 @@ class Window{
 
 
 private:
-SDL_Surface* iconSurface=nullptr;
-SDL_Window* sdlWindow=nullptr; 
-SDL_Event* sdlEvent=nullptr; 
+GLFWwindow* window=nullptr; 
 int wWidth=0, wHeight=0;
-SDL_GLContext ctx; 
 size_t currTime=FGE_CurrentMilliseconds();
 size_t deltaTime=50;
-bool UpKey=false; 
-public:
-inline Window(const char* title, int width, int height, Uint32 flags=0)
+private: 
+inline void Init(const char* title, int width, int height, int flags=0)noexcept
 {
-SDL_Init(SDL_INIT_VIDEO);
-SDL_GL_LoadLibrary(NULL);
-SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,SDL_GL_CONTEXT_PROFILE_CORE);
-SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    window = glfwCreateWindow(width, height, "Hello World",NULL, NULL);
+    glfwWindowHint(flags,1);
+    if (!window)
+    {
+        glfwTerminate();
+        exit(-1);
+    }
+    glfwMakeContextCurrent(window);
+    GLenum err = glewInit();
+    if (err!=GLEW_OK)
+    {
+    std::cout << "Failed to initialize GLEW" << std::endl;
+    exit(-1);
+    }  
 
-sdlWindow=SDL_CreateWindow(title,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, width,height,flags|SDL_WINDOW_OPENGL );
-sdlEvent= new SDL_Event();
-wWidth=width; wHeight=height;
-
-ctx=SDL_GL_CreateContext(sdlWindow);
-gladLoadGLLoader(SDL_GL_GetProcAddress);
-SDL_GL_SetSwapInterval(0);
-glClearColor(1,0.46,0.8,1);
-
-
-
+}
+public:
+inline Window(const char* title, int width, int height, int flags=0)
+{ 
+    Init(title,width,height,flags);
 }
 inline Window()
 {
-SDL_Init(SDL_INIT_VIDEO);
-SDL_GL_LoadLibrary(NULL);
-SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,SDL_GL_CONTEXT_PROFILE_CORE);
-SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
-sdlWindow=SDL_CreateWindow(__FGE_WINDOWSIZE_TITLE,SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED, __FGE_WINDOWSIZE_WIDTH,__FGE_WINDOWSIZE_HEIGHT, SDL_WINDOW_SHOWN|SDL_WINDOW_OPENGL);
-sdlEvent= new SDL_Event();
-wWidth=__FGE_WINDOWSIZE_WIDTH; wHeight=__FGE_WINDOWSIZE_HEIGHT;
-
-ctx=SDL_GL_CreateContext(sdlWindow);
-gladLoadGLLoader(SDL_GL_GetProcAddress);
-SDL_GL_SetSwapInterval(0);
-glClearColor(1,0.46,0.8,1);
-
-
+    Init(__FGE_WINDOWSIZE_TITLE,__FGE_WINDOWSIZE_WIDTH,__FGE_WINDOWSIZE_HEIGHT);
 }
 inline ~Window()
 {
-    SDL_FreeSurface(iconSurface);
-    delete iconSurface;
-    SDL_Quit();
-    SDL_DestroyWindow(sdlWindow);
-    delete sdlEvent;
+    glfwDestroyWindow(window);
+    glfwTerminate();
 }
 inline Window& SetViewport(float x, float y, float w, float h)
 {
@@ -112,19 +94,14 @@ return *this;
 }
 inline Window& PollEvents()
 {
-    SDL_PollEvent(sdlEvent);
-    if(sdlEvent->type==SDL_KEYDOWN&&sdlEvent->key.keysym.sym==SDLK_LSHIFT)UpKey=true;
-    if(sdlEvent->type==SDL_KEYUP&&sdlEvent->key.keysym.sym==SDLK_LSHIFT)UpKey=false;
+    glfwPollEvents();
 
     return *this;
 }
-constexpr bool GetUpKey()const
-{
-    return UpKey;
-}
+
 inline Window& SetTitle(const char* title)
 {
-    SDL_SetWindowTitle(sdlWindow, title);
+    glfwSetWindowTitle(window, title);
     return *this;
 }
 inline bool IsRunning()
@@ -137,7 +114,7 @@ inline bool IsRunning()
 
     currTime=FGE_CurrentMilliseconds();
 
-    return sdlEvent->type!=SDL_QUIT;
+    return !glfwWindowShouldClose(window);
 }
 inline size_t GetDeltaTime()const noexcept
 {
@@ -147,15 +124,13 @@ inline size_t GetFPS()const noexcept
 {
     return 1000/(1+deltaTime); 
 }
-inline bool KeyDown(long long int key)
+inline bool KeyDown(int key)
 {
-    if(sdlEvent->type!=SDL_KEYDOWN)return false;
-    return sdlEvent->key.keysym.sym==key;
+    return glfwGetKey(window,key)==GLFW_PRESS;
 }
-inline bool KeyUp(long long int key)
+inline bool KeyUp(int key)
 {
-    if(sdlEvent->type!=SDL_KEYUP)return false;
-    return sdlEvent->key.keysym.sym==key;
+    return glfwGetKey(window,key)==GLFW_RELEASE;
 }
 inline int GetWidth()
 {
@@ -167,116 +142,44 @@ inline int GetHeight()
 }
 inline Window& QueryMousePos(FGE_Point& p)
 {  
-    SDL_GetMouseState(&p.x,&p.y);
+    glfwGetCursorPos(window,(double*)&p.x,(double*)&p.y);
     p.x-=wWidth/2;
     p.y=wHeight/2-p.y;
     return* this;   
 }
 inline Window& SetWidth(int width)
 {
-    SDL_SetWindowSize(sdlWindow,width,wHeight);
+    glfwSetWindowSize(window,width,wHeight);
     wWidth=width;
     return *this;
 }
 inline Window& SetHeight(int height)
 {
-    SDL_SetWindowSize(sdlWindow,wWidth,height);
+    glfwSetWindowSize(window,wWidth,height);
     wHeight=height;
 
     return *this;
 }
 inline Window& SetSize(int width, int height)
 {
-    SDL_SetWindowSize(sdlWindow,width,height);
+    glfwSetWindowSize(window,width,height);
     wWidth=width; wHeight=height; 
     return *this;
 }
-inline Window& Hint(const char* name, const char* value)
+inline Window& Hint(int name, int value)
 {
-    SDL_SetHint(name,value);
+    glfwWindowHint(name,value);
     return *this;
 }
-inline Window& OnTop()
-{
-    SDL_SetWindowAlwaysOnTop(sdlWindow,(SDL_bool)true);
-    return *this;
-}
-inline Window& NotOnTop()
-{
-    SDL_SetWindowAlwaysOnTop(sdlWindow,(SDL_bool)false);
-    return *this;
-}
-inline Window& Bordered()
-{
-    SDL_SetWindowBordered(sdlWindow,(SDL_bool)true);
-    return *this;
-}
-inline Window& UnBordered()
-{
-    SDL_SetWindowBordered(sdlWindow,(SDL_bool)false);
-    return *this;
-}
-inline Window& SetBrightness(float brightness)
-{
-    SDL_SetWindowBrightness(sdlWindow, brightness);
-    return *this;
-}
-inline Window& SetDisplayMode(const SDL_DisplayMode& mode)
-{
-    SDL_SetWindowDisplayMode(sdlWindow,&mode);
-    return *this;
-}
-inline Window& Fullscreen()
-{
-    SDL_SetWindowFullscreen(sdlWindow,SDL_WINDOW_FULLSCREEN_DESKTOP);
-    SDL_GetWindowSize(sdlWindow,&wWidth,&wHeight);
 
-    return *this;
-}
-inline Window& GrabInput()
-{
-    SDL_SetWindowGrab(sdlWindow,(SDL_bool)true);
-    return *this;
-}
-inline Window& UnGrabInput()
-{
-    SDL_SetWindowGrab(sdlWindow,(SDL_bool)false);
-    return *this;
-}
-inline Window& SetIcon(const char* path)
-{
-    iconSurface=SDL_LoadBMP(path);
-    SDL_SetWindowIcon(sdlWindow,iconSurface);
-    return *this;
-}
-inline Window& GrabMouse()
-{
-    SDL_SetWindowMouseGrab(sdlWindow,(SDL_bool)true);
-    return *this;
-}
-inline Window& UnGrabMouse()
-{
-    SDL_SetWindowMouseGrab(sdlWindow,(SDL_bool)false);
-    return *this;
-}
-inline Window& SetOpacity(float opacity)
-{
-    SDL_SetWindowOpacity(sdlWindow,opacity);
-    return *this;
-}
-inline Window& SetResizable(bool resizable)
-{
-    SDL_SetWindowResizable(sdlWindow, (SDL_bool)resizable);
-    return *this;
-}
 inline Window& Swap()
 {
-    SDL_GL_SwapWindow(sdlWindow);
+     glfwSwapBuffers(window);
     return *this;
 }
 inline bool LeftClick()
 {
-return (sdlEvent->type==SDL_MOUSEBUTTONDOWN&&sdlEvent->button.button==SDL_BUTTON_LEFT);
+return glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS;
 }
 
 

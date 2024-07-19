@@ -2,7 +2,7 @@
 #define FGE_IMAGE_H_
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "stb_image.h"
+#include "ext/stb_image.h"
 #include "fge_debug.h"
 #include <iostream>
 #include "fge_types.h"

@@ -7,6 +7,7 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
+#include "ext/glew.h"
 #include "fge_types.h"
 #include "fge_prim_geometry.h"
 #include "fge_debug.h"

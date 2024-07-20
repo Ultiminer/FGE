@@ -16,6 +16,6 @@ int main(int argc, char** argv)
     FGE_DrawImage(img_body,img);
     rrect.Rotate(0.01).UpdateShape().Draw(FGE::red).DrawBorder();
     FGE_Loop_End(wind);
-
+    
     FGE_Return();
 }

@@ -15,7 +15,7 @@
 * SVG support
 * GUI framework
 ## What happens to my compilation time, that is not best practice, you should require people to link
-* We live in times where people use TypeScript and happily wait for 10 seconds, just to get js code, I think people will survive a 3 second compilation time
+* We live in times were people use TypeScript and happily wait for 10 seconds, just to get js code, I think people will survive 3 seconds of compilation time
 ## Eyes are open for more contributors
 * Currently, I am independently working on this library, so new contributors are always welcome
   

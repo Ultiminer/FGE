@@ -9,5 +9,12 @@
 * The window class accesses WIN32 primitives directly and was also written by me
 ## How To Build
 * At the moment only windows plattforms and Opengl-Version >4.5 are supported by this library (which are almost all windows plattforms)
-* To build, simply include src/fge.h and you are finished (gcc requires the flags -lopengl32 -lGdi32 -municode) 
+* To build, simply include src/fge.h and you are finished (gcc requires the flags -lopengl32 -lGdi32 -municode)
+## What is planned?
+* TTF support
+* SVG support
+* GUI framework 
+## Eyes are open for more contributors
+* Currently, I am independently working on this library, so new contributors are always welcome
+  
 

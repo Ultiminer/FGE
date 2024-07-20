@@ -3,8 +3,13 @@
 /*
 Sets up an OPENGL CONEXT using SDL2
 */
-#include "ext/glew.h"
-#include "ext/glfw3.h"
+#define SOGL_MAJOR_VERSION 4
+#define SOGL_MINOR_VERSION 5
+#define SOGL_IMPLEMENTATION_WIN32
+
+#include "ext/simple_loader.h"
+#include "ext/lean_window.h"
+
 #include <cstdint>
 #include "fge_types.h"
 #include <iostream>
@@ -43,35 +48,22 @@ namespace FGE
 
 
 class Window{
-
-
+public:
+LeanWindow* window=nullptr; 
 private:
-GLFWwindow* window=nullptr; 
+
+LeanEvent* ev;
 int wWidth=0, wHeight=0;
 size_t currTime=FGE_CurrentMilliseconds();
 size_t deltaTime=50;
 private: 
 inline void Init(const char* title, int width, int height, int flags=0)noexcept
 {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    window = glfwCreateWindow(width, height, "Hello World",NULL, NULL);
-    glfwWindowHint(flags,1);
-    if (!window)
-    {
-        glfwTerminate();
-        exit(-1);
-    }
-    glfwMakeContextCurrent(window);
-    GLenum err = glewInit();
-    if (err!=GLEW_OK)
-    {
-    std::cout << "Failed to initialize GLEW" << std::endl;
-    exit(-1);
-    }  
+    wWidth=width;
+    wHeight=height; 
 
+    window=LeanCreateWindow(title,width,height);
+    ev=LeanCreateEvent();
 }
 public:
 inline Window(const char* title, int width, int height, int flags=0)
@@ -84,37 +76,30 @@ inline Window()
 }
 inline ~Window()
 {
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    LeanDestroyWindow(window);
+    LeanDestroyEvent(ev);
 }
 inline Window& SetViewport(float x, float y, float w, float h)
 {
 glViewport(x,y,w,h);
 return *this; 
 }
-inline Window& PollEvents()
-{
-    glfwPollEvents();
 
-    return *this;
-}
-
-inline Window& SetTitle(const char* title)
-{
-    glfwSetWindowTitle(window, title);
-    return *this;
-}
-inline bool IsRunning()
+inline int IsRunning()
 {
     deltaTime=FGE_CurrentMilliseconds()-currTime;
-
+   
     #ifndef FGE_NO_VSYNC
     while(1000/(1+deltaTime)>__FGE_FPS_CAP)deltaTime=FGE_CurrentMilliseconds()-currTime;
     #endif
 
     currTime=FGE_CurrentMilliseconds();
-
-    return !glfwWindowShouldClose(window);
+   
+    return ev->update();
+}
+inline void PollEvents()noexcept
+{
+    ev->poll();
 }
 inline size_t GetDeltaTime()const noexcept
 {
@@ -126,11 +111,11 @@ inline size_t GetFPS()const noexcept
 }
 inline bool KeyDown(int key)
 {
-    return glfwGetKey(window,key)==GLFW_PRESS;
+    return ev->code==LEAN_KEYDOWN&&ev->key==key;
 }
 inline bool KeyUp(int key)
 {
-    return glfwGetKey(window,key)==GLFW_RELEASE;
+     return ev->code==LEAN_KEYUP&&ev->key==key;
 }
 inline int GetWidth()
 {
@@ -142,46 +127,25 @@ inline int GetHeight()
 }
 inline Window& QueryMousePos(FGE_Point& p)
 {  
-    glfwGetCursorPos(window,(double*)&p.x,(double*)&p.y);
+    p.x=ev->cursor_x;
+    p.y=ev->cursor_y;
     p.x-=wWidth/2;
     p.y=wHeight/2-p.y;
     return* this;   
 }
-inline Window& SetWidth(int width)
-{
-    glfwSetWindowSize(window,width,wHeight);
-    wWidth=width;
-    return *this;
-}
-inline Window& SetHeight(int height)
-{
-    glfwSetWindowSize(window,wWidth,height);
-    wHeight=height;
-
-    return *this;
-}
-inline Window& SetSize(int width, int height)
-{
-    glfwSetWindowSize(window,width,height);
-    wWidth=width; wHeight=height; 
-    return *this;
-}
-inline Window& Hint(int name, int value)
-{
-    glfwWindowHint(name,value);
-    return *this;
-}
-
 inline Window& Swap()
 {
-     glfwSwapBuffers(window);
+    LeanSwapBuffers(window);
     return *this;
 }
 inline bool LeftClick()
 {
-return glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS;
+return ev->code==LEAN_BUTTONDOWN&&ev->button==LEAN_BUTTON_LEFT;
 }
-
+inline void Show()noexcept
+{
+    LeanShowWindow(window);
+}
 
 
 };

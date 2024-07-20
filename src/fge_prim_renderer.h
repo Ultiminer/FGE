@@ -7,21 +7,28 @@
 #include <vector>
 #include <array>
 #include <unordered_map>
-#include "ext/glew.h"
+#include "ext/simple_loader.h"
 #include "fge_types.h"
 #include "fge_prim_geometry.h"
 #include "fge_debug.h"
 
-
+#ifdef VERTEX_PATH
+#define __VERTEX_PATH VERTEX_PATH
+#else 
+#define __VERTEX_PATH "shader/default_vertex.glsl"
+#endif
+#ifdef FRAGMENT_PATH
+#define __FRAGMENT_PATH FRAGMENT_PATH
+#else 
+#define __FRAGMENT_PATH "shader/default_fragment.glsl"
+#endif
 
 
 
 #define __FGE_EXPAND_COLOR_STRUCT(__COLOR_STRUCT__)(float)__COLOR_STRUCT__.r,(float)__COLOR_STRUCT__.g,(float)__COLOR_STRUCT__.b,(float)__COLOR_STRUCT__.a
 #define FGE_START_RENDER() glClear(GL_COLOR_BUFFER_BIT)
 
-#ifndef FGE_CUSTOM_ENTRY_POINT
-#define FGE_Main WinMain
-#endif
+
 
 inline struct __FGE_PRIMITIVE_RENDERER{unsigned int vertexBuffer; unsigned int vertexArray; unsigned int elementBuffer;
  unsigned int shaderProgram;}
@@ -296,7 +303,7 @@ inline void FGE_RENDER_SMOOTH()
 
 inline void FGE_INIT_RENDER_DEFAULT()
 {
-    __FGE_PRIM_RENDER_INIT("../shader/default_vertex.glsl","../shader/default_fragment.glsl",{"myColor","windSize","coordMode","drawImage","ourTexture"});
+    __FGE_PRIM_RENDER_INIT(__VERTEX_PATH,__FRAGMENT_PATH,{"myColor","windSize","coordMode","drawImage","ourTexture"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0)
     .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0);
 

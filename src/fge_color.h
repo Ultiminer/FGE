@@ -2,7 +2,7 @@
 #define FGE_COLOR_H_
 #include "fge_types.h"
 #include <array>
-#include "quick_math.h"
+#include "ext/quick_math.h"
 
 /*
 The mantra of this header is that colors should come out of the box with zero mental overhead.

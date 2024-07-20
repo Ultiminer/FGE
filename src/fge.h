@@ -11,7 +11,7 @@ using namespace FGE;
 
 
 inline enum class FGE_STATE{
-ERROR=-1,
+EXCEPT_ERROR=-1,
 EXIT,
 RUN
 }__fge_state;
@@ -33,12 +33,11 @@ inline FGE::Window FGE_General_Init()noexcept
      /*Creating BLACKPINK tm xDDD*/
     FGE_SetClearColor(FGE::lightpink|FGE::black);
     FGE_UseAbsoluteCoords(wind.GetWidth(),wind.GetHeight());
-    FGE_SetState(FGE_STATE::RUN);
-
+    FGE_SetState(FGE_STATE::RUN);    
     return wind;
 }
-#define FGE_Loop_Start(__FGE_WINDOW_OBJ__) while(__FGE_WINDOW_OBJ__.IsRunning()&&__fge_state==FGE_STATE::RUN){FGE_START_RENDER();
-#define FGE_Loop_End(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.Swap();__FGE_WINDOW_OBJ__.PollEvents();}FGE_PRIM_RENDER_DELETE();FGE_SetState(FGE_STATE::EXIT);
+#define FGE_Loop_Start(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.Show();__FGE_WINDOW_OBJ__.PollEvents(); while(__FGE_WINDOW_OBJ__.IsRunning()>0&&__fge_state==FGE_STATE::RUN){__FGE_WINDOW_OBJ__.PollEvents(); FGE_START_RENDER();
+#define FGE_Loop_End(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.Swap();}FGE_PRIM_RENDER_DELETE();FGE_SetState(FGE_STATE::EXIT);
 #define FGE_Return()   return (int)FGE_GetState(); 
 
 #endif

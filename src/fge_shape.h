@@ -4,7 +4,7 @@
 #include "math.h"
 #include <array>
 #include <string>
-#include "quick_math.h"
+#include "ext/quick_math.h"
 
 
 /*Interface for the drawing operation and geometric manipulation of basic shapes*/

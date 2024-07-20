@@ -1,7 +1,5 @@
 #include <iostream>
-#include "math.h"
 #include "fge.h"
-#include "fge_image.h"
 
 //This library can be super extended with any kind of SDL, SDL2, or OpenGL functionality 
 int main(int argc, char** argv)
@@ -12,8 +10,6 @@ int main(int argc, char** argv)
 
     FGE::SRoundedRect rrect{100,100,160,80,0,0.9};
             
-    
-
     FGE_Loop_Start(wind);
   
     rrect.Rotate(0.01).UpdateShape().Draw(FGE::red).DrawBorder();

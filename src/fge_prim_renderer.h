@@ -332,21 +332,37 @@ inline void FGE_RENDER_SMOOTH()
 
 inline void FGE_INIT_RENDER_DEFAULT()
 {
-    __FGE_PRIM_RENDER_INIT(__VERTEX_PATH,__FRAGMENT_PATH,{"myColor","windSize","coordMode","drawImage","ourTexture"});
+    __FGE_PRIM_RENDER_INIT(__VERTEX_PATH,__FRAGMENT_PATH,{"myColor","windSize","coordMode","drawImage","ourTexture","transCoords","allowTrans"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0)
-    .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0);
+    .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0).seti("allowTrans",0)
+    .setf("transCoords",1,0,0,1);
 
     FGE_RENDER_SMOOTH();
 }
-
+inline void FGE_SetPosTransMatrix(float a11, float a12, float a21, float a22)noexcept
+{
+    __fge_primitive_uniform_sys.setf("transCoords",a11,a12,a21,a22);
+}
+inline void FGE_AllowTransform()noexcept
+{
+__fge_primitive_uniform_sys.seti("allowTrans",1);
+}
+inline void FGE_DisallowTransform()noexcept
+{
+__fge_primitive_uniform_sys.seti("allowTrans",0);
+}
 inline void FGE_UseRelativeCoords()noexcept
 {
    __fge_primitive_uniform_sys.seti("coordMode",0);
 }
-inline void FGE_UseAbsoluteCoords(float winWidth, float winHeight)noexcept
+inline void FGE_SendWindowSize(float winWidth, float winHeight)
 {
     glViewport(0,0,winWidth,winHeight);
-   __fge_primitive_uniform_sys.seti("coordMode",1).setf("windSize",winWidth,winHeight);
+    __fge_primitive_uniform_sys.setf("windSize",winWidth,winHeight);
+}
+inline void FGE_UseAbsoluteCoords()noexcept
+{
+   __fge_primitive_uniform_sys.seti("coordMode",1);
 }
 inline void FGE_SetColor(const FGE_Color& col)noexcept
 {

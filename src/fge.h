@@ -34,14 +34,10 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#define BUILD_ALL_TARGETS remove("../build/main.o");remove("../build/glad.o");
-
-using namespace FGE; 
-
 
 inline enum class FGE_STATE{
-EXCEPT_ERROR=-1,
-EXIT,
+EXCEPT_ERROR=EXIT_FAILURE,
+EXIT=EXIT_SUCCESS,
 RUN
 }__fge_state;
 
@@ -59,9 +55,9 @@ inline FGE::Window FGE_General_Init()noexcept
      //Initializing FGE functionality
     FGE_INIT_RENDER_DEFAULT();
     FGE_RENDER_SMOOTH();
-     /*Creating BLACKPINK tm xDDD*/
     FGE_SetClearColor(FGE::lightpink|FGE::black);
-    FGE_UseAbsoluteCoords(wind.GetWidth(),wind.GetHeight());
+    FGE_SendWindowSize(wind.GetWidth(),wind.GetHeight());
+    FGE_UseAbsoluteCoords();
     FGE_SetState(FGE_STATE::RUN);    
     return wind;
 }

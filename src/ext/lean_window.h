@@ -287,19 +287,20 @@ inline void LeanDestroyWindow(LeanWindow* wind)noexcept
 inline int LeanGetWidth(LeanWindow* wind)noexcept
 {
   RECT rct;
- GetWindowRect(wind->hwnd, &rct);
+  
+ GetClientRect(wind->hwnd, &rct);
  return rct.right-rct.left;
 }
 inline int LeanGetHeight(LeanWindow* wind)noexcept
 {
   RECT rct;
- GetWindowRect(wind->hwnd, &rct);
+ GetClientRect(wind->hwnd, &rct);
  return rct.bottom-rct.top;
 }
 inline void LeanGetSize(LeanWindow* wind, int& x, int& y)noexcept
 {
     RECT rct;
- GetWindowRect(wind->hwnd, &rct);
+ GetClientRect(wind->hwnd, &rct);
  x=rct.right-rct.left;
  y=rct.bottom-rct.top; 
 }

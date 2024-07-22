@@ -91,17 +91,17 @@ inline int IsRunning()
     deltaTime=FGE_CurrentMilliseconds()-currTime;
 
     /*
-    Polling width change events from teh WIN32 APi 
+    Polling size change events from the WIN32 APi 
     and Updating renderers
     */
-   const int nWidth=LeanGetWidth(window),nHeight=LeanGetHeight(window);
+    const int nWidth=LeanGetWidth(window),nHeight=LeanGetHeight(window);
     if(nWidth*nHeight!=0)
     {
     if(nWidth!=wWidth||nHeight!=wHeight)
     {
     wWidth=nWidth;
     wHeight=nHeight;
-    FGE_UseAbsoluteCoords(wWidth,wHeight);
+    FGE_SendWindowSize(wWidth,wHeight);
     }
     }
 
@@ -144,6 +144,7 @@ inline int GetHeight()
 inline Window& GetCursor(int&x , int& y)
 {  
     LeanGetCursor(window,x,y);
+    /*Changing the coordinates from top-left to centered*/
     x-=wWidth/2;
     y=wHeight/2-y;
     return* this;   

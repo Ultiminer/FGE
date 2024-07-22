@@ -14,6 +14,7 @@ Sets up an OPENGL CONEXT using SDL2
 #include "fge_types.h"
 #include <iostream>
 #include "fge_time.h"
+#include "fge_prim_renderer.h"
 
 #ifdef FGE_NO_VSYNC
 #define FGE_FPS_CAP 1000
@@ -24,7 +25,7 @@ Sets up an OPENGL CONEXT using SDL2
 #ifdef FGE_FPS_CAP
 #define __FGE_FPS_CAP FGE_FPS_CAP
 #else 
-#define __FGE_FPS_CAP 50
+#define __FGE_FPS_CAP 60
 #endif
 
 #ifdef FGE_WINDOW_WIDTH
@@ -88,7 +89,22 @@ return *this;
 inline int IsRunning()
 {
     deltaTime=FGE_CurrentMilliseconds()-currTime;
-   
+
+    /*
+    Polling width change events from teh WIN32 APi 
+    and Updating renderers
+    */
+   const int nWidth=LeanGetWidth(window),nHeight=LeanGetHeight(window);
+    if(nWidth*nHeight!=0)
+    {
+    if(nWidth!=wWidth||nHeight!=wHeight)
+    {
+    wWidth=nWidth;
+    wHeight=nHeight;
+    FGE_UseAbsoluteCoords(wWidth,wHeight);
+    }
+    }
+
     #ifndef FGE_NO_VSYNC
     while(1000/(1+deltaTime)>__FGE_FPS_CAP)deltaTime=FGE_CurrentMilliseconds()-currTime;
     #endif
@@ -125,12 +141,11 @@ inline int GetHeight()
 {
     return wHeight; 
 }
-inline Window& QueryMousePos(FGE_Point& p)
+inline Window& GetCursor(int&x , int& y)
 {  
-    p.x=ev->cursor_x;
-    p.y=ev->cursor_y;
-    p.x-=wWidth/2;
-    p.y=wHeight/2-p.y;
+    LeanGetCursor(window,x,y);
+    x-=wWidth/2;
+    y=wHeight/2-y;
     return* this;   
 }
 inline Window& Swap()

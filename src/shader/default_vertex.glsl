@@ -17,7 +17,7 @@ gl_Position = vec4(aPos.x,aPos.y, 1.0, 1.0);
 else
 /*ABSOLUTE COORDINATES*/
 if(coordMode==1)
-gl_Position = vec4(2*aPos.x/windSize.x,2*aPos.y/windSize.y, 1.0, 1.0); 
+gl_Position = vec4((aPos.x)/windSize.x,(aPos.y)/windSize.y, 1.0, 1.0); 
 
 
 }

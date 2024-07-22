@@ -345,6 +345,7 @@ inline void FGE_UseRelativeCoords()noexcept
 }
 inline void FGE_UseAbsoluteCoords(float winWidth, float winHeight)noexcept
 {
+    glViewport(0,0,winWidth,winHeight);
    __fge_primitive_uniform_sys.seti("coordMode",1).setf("windSize",winWidth,winHeight);
 }
 inline void FGE_SetColor(const FGE_Color& col)noexcept

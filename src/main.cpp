@@ -12,9 +12,12 @@ int main(int argc, char** argv)
     FGE::SRoundedRect rrect{100,100,160,80,0,0.9};
     
     FGE_Loop_Start(wind);
-
+    const float dt=wind.GetDeltaTime();
     FGE_DrawImage(img_body,img);
-    rrect.Rotate(0.01).UpdateShape().Draw(FGE::red).DrawBorder();
+    rrect.Rotate(0.001*dt).UpdateShape().Draw(FGE::red).DrawBorder();
+   /* int x,y; 
+    wind.GetCursor(x,y);
+    std::cout<<"x:"<<x<<"y:"<<y<<std::endl;*/
     FGE_Loop_End(wind);
     
     FGE_Return();

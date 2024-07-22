@@ -45,7 +45,12 @@ int main(int, char**);
 
 typedef PROC (*wglGetProcAddressFP)(LPCSTR Arg1);
 static HMODULE openGLLibHandle = NULL;
-
+wchar_t *char_to_wchar(const char* charArray)
+{
+    wchar_t* wString=new wchar_t[4096];
+    MultiByteToWideChar(CP_ACP, 0, charArray, -1, wString, 4096);
+    return wString;
+}
 
 #define DECLARE_WGL_EXT_FUNC(returnType, name, ...) typedef returnType (WINAPI *name##FUNC)(__VA_ARGS__);\
     name##FUNC name = (name##FUNC)0;
@@ -63,8 +68,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 inline struct LeanEvent
 {
     uint8_t button; 
-    int cursor_x; 
-    int cursor_y; 
     int key; 
     MSG msg; 
     uint32_t code;
@@ -87,32 +90,18 @@ inline struct LeanEvent
 #define LEAN_KEYUP WM_KEYUP
 
 
-union __WIN_MOUSE{ LPARAM buff; struct{int x; int y;};};
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    __WIN_MOUSE mouse;
-    mouse.buff=lParam;
+    {
     __lean_event.code=uMsg;
-    __lean_event.cursor_x=mouse.x; 
-    __lean_event.cursor_y = mouse.y;
     __lean_event.button = GET_XBUTTON_WPARAM(wParam);  
     __lean_event.key=   GET_KEYSTATE_WPARAM(wParam);
+    }
     switch (uMsg)
     {
-        
       case WM_SIZING: {
-            if (glViewport) {
-                RECT* bounds = (RECT *) lParam;
-                UINT width = bounds->right - bounds->left;
-                UINT height = bounds->bottom - bounds->top;
-                glViewport(0, 0, width, height);
-            }
             return 0;
         } break;
-        case WM_MOVE: Sleep(10);return 0; break;
-        case WM_SIZE: return 0; break;
-
         case WM_PAINT: {
         return 0;
           
@@ -123,6 +112,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         } break;
         case WM_ERASEBKGND:
         { 
+           auto context= GetDC(hwnd);
         return TRUE;}
         break;
     }
@@ -213,7 +203,7 @@ inline LeanWindow* LeanCreateWindow(const char* title="Std", int width=CW_USEDEF
     wnd->hwnd = CreateWindowExW(
     0,                              // Optional window styles.
     wnd->wc.lpszClassName,                     // Window class
-    (LPCWSTR)&title,    // Window text
+    char_to_wchar(title),    // Window text
     WS_OVERLAPPEDWINDOW,            // Window style
 
     // Size and position
@@ -293,6 +283,33 @@ inline void LeanDestroyWindow(LeanWindow* wind)noexcept
     wind->hglrc
     );
     delete wind; 
+}
+inline int LeanGetWidth(LeanWindow* wind)noexcept
+{
+  RECT rct;
+ GetWindowRect(wind->hwnd, &rct);
+ return rct.right-rct.left;
+}
+inline int LeanGetHeight(LeanWindow* wind)noexcept
+{
+  RECT rct;
+ GetWindowRect(wind->hwnd, &rct);
+ return rct.bottom-rct.top;
+}
+inline void LeanGetSize(LeanWindow* wind, int& x, int& y)noexcept
+{
+    RECT rct;
+ GetWindowRect(wind->hwnd, &rct);
+ x=rct.right-rct.left;
+ y=rct.bottom-rct.top; 
+}
+inline void LeanGetCursor(LeanWindow* wind, int& x, int& y)noexcept
+{
+    POINT p;
+    GetCursorPos(&p);
+    ScreenToClient(wind->hwnd, &p);
+    x=(int)p.x;
+    y=(int)p.y;
 }
 inline void LeanShowWindow(LeanWindow* wind)noexcept
 {

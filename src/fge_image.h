@@ -28,7 +28,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 stbi_set_flip_vertically_on_load(true);  
 unsigned char *data= stbi_load(path, &width, &height, &channelNum, 0);
-if (!data) FGE_EXIT("Image path was nonexistent-> exit!");
+if (!data) FGE_EXIT("Image path"<<path<<"was nonexistent-> exit!");
 
 
 const GLint format= (channelNum==4)?GL_RGBA:GL_RGB;

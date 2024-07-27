@@ -103,6 +103,7 @@ inline void FGE_DrawImage(const FGE_FRect& rect,  const FGE_Texture& texture,flo
     __fge_primitive_uniform_sys.seti("drawImage",0);
     glDisableVertexAttribArray(1);
 }
+
 inline void FGE_DrawImage(float x, float y, float w , float h,  FGE_Texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
 const FGE_FRect dummy{x,y,w,h};
@@ -110,5 +111,29 @@ FGE_DrawImage(dummy,texture,widthPercentage,heightPercentage,xOffset,yOffset);
 }
 
 
+inline void FGE_DrawAlpha(const FGE_FRect& rect,  const FGE_Texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+{
+
+    __fge_primitive_uniform_sys.seti("ourTexture",0).seti("drawImage",2);
+    const size_t indicesSize{6};
+    const auto verticies=__MakeImageVerticies(rect,widthPercentage,heightPercentage,xOffset,yOffset);
+
+    glBindVertexArray(__fge_primitive_renderer.vertexArray);
+    glBindBuffer(GL_ARRAY_BUFFER,__fge_primitive_renderer.vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(float)*4*4,&verticies,GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,__fge_primitive_renderer.elementBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(unsigned int)*indicesSize,__FGE_PRIMITIVE_PRELOAD_INDICES,GL_DYNAMIC_DRAW);
+   
+    __FGE_PRIMITIVE_SetAttributes(2,1,4);
+    __FGE_PRIMITIVE_SetAttributes(2,0,4);
+
+    glBindVertexArray(__fge_primitive_renderer.vertexArray);
+    texture.bind();
+
+    glUseProgram(__fge_primitive_renderer.shaderProgram);
+    glDrawElements(GL_TRIANGLES,indicesSize,GL_UNSIGNED_INT,0);
+    __fge_primitive_uniform_sys.seti("drawImage",0);
+    glDisableVertexAttribArray(1);
+}
 
 #endif

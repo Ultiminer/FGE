@@ -9,9 +9,9 @@ int main(int argc, char** argv)
 {
     //Creating the window context
     FGE::Window wind= FGE_General_Init();
-    
+    FGE_Texture consolas=FGE_GetFontTexture("Consolas", FONT_SIZE::pt60);
     FGE_Loop_Start(wind);
-    FGE_RenderText("Hi Label World :))",{0,0,500,100},15,30,"Consolas",FONT_SIZE::pt30);
+    FGE_RenderText("Lets make ourselves a nice label",{-250,-50,500,40},15,30,consolas);
 
     FGE_Loop_End(wind);
     

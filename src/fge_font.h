@@ -54,11 +54,10 @@ inline void FGE_RenderText(const std::string& txt,const FGE_FRect& label, float 
         //Check for collisions with label
         if(dim.x>label.x+label.w|| ch=='\n'){
             dim.x=label.x;
-            dim.y-=label.h;
+            dim.y-=char_height;
         }
         if(dim.y<label.y)return; 
         if(ch=='\n')continue;
-
         //Draw to screen if not bad character
         if(ch>32&&ch<177)
         FGE_DrawImage(dim,img,FGE_FONTPOS_MULTIPLIER,FGE_FONTPOS_H,1.009f*(ch-33)*FGE_FONTPOS_MULTIPLIER,FGE_FONTPOS_Y_NORM);
@@ -68,7 +67,29 @@ inline void FGE_RenderText(const std::string& txt,const FGE_FRect& label, float 
     }
 
 }
+inline void FGE_RenderText(const std::string& txt,const FGE_FRect& label, float char_width, float char_height, const FGE_Texture& img )noexcept
+{
 
+    FGE_FRect dim={label.x,label.h-char_height, char_width, char_height};
+
+    for(auto& ch: txt)
+    {   
+        //Check for collisions with label
+        if(dim.x>label.x+label.w|| ch=='\n'){
+            dim.x=label.x;
+            dim.y-=char_height;
+        }
+        if(dim.y<label.y)return; 
+        if(ch=='\n')continue;
+        //Draw to screen if not bad character
+        if(ch>32&&ch<177)
+        FGE_DrawImage(dim,img,FGE_FONTPOS_MULTIPLIER,FGE_FONTPOS_H,1.009f*(ch-33)*FGE_FONTPOS_MULTIPLIER,FGE_FONTPOS_Y_NORM);
+
+        //Advance character pointer
+        dim.x+=char_width;
+    }
+
+}
 
 
 

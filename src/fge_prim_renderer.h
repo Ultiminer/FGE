@@ -253,6 +253,17 @@ inline void __FGE_PRIM_RENDER_DRAW_SHAPE(float* data, size_t Size,GLenum usage=G
     glUseProgram(__fge_primitive_renderer.shaderProgram);
     glDrawArrays(GL_LINE_STRIP,0,Size);
 }
+inline void __FGE_PRIM_RENDER_DRAW_LINE(float* data, size_t Size,GLenum usage=GL_DYNAMIC_DRAW)noexcept 
+{
+    glBindVertexArray(__fge_primitive_renderer.vertexArray);
+    glBindBuffer(GL_ARRAY_BUFFER,__fge_primitive_renderer.vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(float)*2*Size,data,usage);
+    
+    __FGE_PRIMITIVE_SetAttributes(2);
+    glBindVertexArray(__fge_primitive_renderer.vertexArray);
+    glUseProgram(__fge_primitive_renderer.shaderProgram);
+    glDrawArrays(GL_LINES,0,Size);
+}
 inline void __FGE_PRIM_RENDER_FILL_TRIANGLE(float* data, size_t Size,GLenum usage=GL_DYNAMIC_DRAW)noexcept 
 {
     glBindVertexArray(__fge_primitive_renderer.vertexArray);

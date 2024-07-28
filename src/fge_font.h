@@ -43,10 +43,9 @@ inline FGE_Texture FGE_GetFontTexture(const std::string& font_name, const FONT_S
     FGE_Texture retVal{path.c_str()};
     return retVal;
 }
-inline void FGE_RenderText(const std::string& txt,const FGE_FRect& label, float char_width, float char_height, const FGE_Texture& img )noexcept
+inline void FGE_RenderText(const std::string& txt,const FGE_FRect& label, float char_width, float char_height, const FGE_Texture& img)noexcept
 {
-
-    FGE_FRect dim={label.x,label.h-char_height, char_width, char_height};
+    FGE_FRect dim={label.x,label.y+label.h-char_height, char_width, char_height};
 
     for(auto& ch: txt)
     {   

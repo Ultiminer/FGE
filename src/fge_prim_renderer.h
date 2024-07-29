@@ -40,7 +40,13 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "fge_types.h"
 #include "fge_prim_geometry.h"
 #include "fge_debug.h"
+#include <string>
 
+#ifdef SRC_PATH 
+#define __SRC_PATH SRC_PATH
+#else 
+#define __SRC_PATH ""
+#endif
 #ifdef VERTEX_PATH
 #define __VERTEX_PATH VERTEX_PATH
 #else 
@@ -343,7 +349,9 @@ inline void FGE_RENDER_SMOOTH()
 
 inline void FGE_INIT_RENDER_DEFAULT()
 {
-    __FGE_PRIM_RENDER_INIT(__VERTEX_PATH,__FRAGMENT_PATH,{"myColor","windSize","coordMode","drawImage","ourTexture","transCoords","allowTrans"});
+     std::string src=__SRC_PATH;
+
+    __FGE_PRIM_RENDER_INIT((src+__VERTEX_PATH).c_str(),(src+__FRAGMENT_PATH).c_str(),{"myColor","windSize","coordMode","drawImage","ourTexture","transCoords","allowTrans"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0)
     .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0).seti("allowTrans",0)
     .setf("transCoords",1,0,0,1);

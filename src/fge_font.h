@@ -36,9 +36,10 @@ inline std::string __FONT_SIZE_TO_PATH_NAME(const FONT_SIZE& s)noexcept
 }
 inline FGE_Texture FGE_GetFontTexture(const std::string& font_name, const FONT_SIZE& pt)noexcept
 {
+    const std::string src=__SRC_PATH;
     constexpr const char* path_head="../font/";
     constexpr const char* file_format=".png";
-    const std::string path=path_head+font_name+__FONT_SIZE_TO_PATH_NAME(pt)+file_format;
+    const std::string path=src+path_head+font_name+__FONT_SIZE_TO_PATH_NAME(pt)+file_format;
 
     FGE_Texture retVal{path.c_str()};
     return retVal;

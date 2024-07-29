@@ -1,7 +1,9 @@
+#define SRC_PATH "src/"
+
 #include <iostream>
-#include "fge.h"
-#include "fge_image.h"
-#include "fge_font.h"
+#include "src/fge.h"
+#include "src/fge_image.h"
+#include "src/fge_font.h"
 
 
 

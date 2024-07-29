@@ -17,7 +17,6 @@ int channelNum=0;
 FGE_Texture(){}
 FGE_Texture(const char* path)
 {
-
 glGenTextures(1, &id);
 glBindTexture(GL_TEXTURE_2D, id);
 
@@ -29,7 +28,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 stbi_set_flip_vertically_on_load(true);  
-unsigned char *data= stbi_load(path, &width, &height, &channelNum, 0);
+unsigned char *data= stbi_load((path), &width, &height, &channelNum, 0);
 
 if (data==nullptr) FGE_EXIT("Image path"<<path<<"was nonexistent-> exit!");
 const GLint format= (channelNum==4)?GL_RGBA:GL_RGB;
@@ -40,7 +39,6 @@ stbi_image_free(data);
 }
 FGE_Texture(const char* path,GLint formatA,GLint formatB)
 {
-
 glGenTextures(1, &id);
 glBindTexture(GL_TEXTURE_2D, id);
 // set the texture wrapping/filtering options (on the currently bound texture object)
@@ -50,7 +48,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 stbi_set_flip_vertically_on_load(true);  
-unsigned char *data= stbi_load(path, &width, &height, &channelNum, 0);
+unsigned char *data= stbi_load((path), &width, &height, &channelNum, 0);
 if (data==nullptr) FGE_EXIT("Image path"<<path<<"was nonexistent-> exit!");
 glTexImage2D(GL_TEXTURE_2D, 0, formatA, width, height, 0, formatB, GL_UNSIGNED_BYTE, data);
 glGenerateMipmap(GL_TEXTURE_2D);

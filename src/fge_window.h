@@ -106,7 +106,7 @@ inline int IsRunning()
     }
 
     #ifndef FGE_NO_VSYNC
-    while(1000/(1+deltaTime)>__FGE_FPS_CAP)deltaTime=FGE_CurrentMilliseconds()-currTime;
+    while(1000/(1+deltaTime)>__FGE_FPS_CAP){deltaTime=FGE_CurrentMilliseconds()-currTime;Sleep(5);}
     #endif
 
     currTime=FGE_CurrentMilliseconds();

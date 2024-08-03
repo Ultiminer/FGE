@@ -40,13 +40,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "fge_types.h"
 #include "fge_prim_geometry.h"
 #include "fge_debug.h"
-#include <string>
 
-#ifdef SRC_PATH 
-#define __SRC_PATH SRC_PATH
-#else 
-#define __SRC_PATH ""
-#endif
 #ifdef VERTEX_PATH
 #define __VERTEX_PATH VERTEX_PATH
 #else 
@@ -98,6 +92,12 @@ inline __FGE_PRIMITIVE_GlUniformSystem& setf(const char* uniform,float val1, flo
 inline __FGE_PRIMITIVE_GlUniformSystem& setf(const char* uniform,float val1, float val2, float val3, float val4)
 {
     glUniform4f(uniformMap.at(uniform),val1,val2,val3, val4);
+    return *this;
+}
+inline __FGE_PRIMITIVE_GlUniformSystem& setf(const char* uniform,float val1, float val2, float val3, float val4, float val5, float val6)
+{
+    float buffer[]={val1,  val2,  val3,  val4,  val5,  val6};
+    glUniformMatrix2x3fv(uniformMap.at(uniform),1,GL_FALSE, buffer);
     return *this;
 }
 inline __FGE_PRIMITIVE_GlUniformSystem& seti(const char* uniform,int val1)
@@ -349,18 +349,16 @@ inline void FGE_RENDER_SMOOTH()
 
 inline void FGE_INIT_RENDER_DEFAULT()
 {
-     std::string src=__SRC_PATH;
-
-    __FGE_PRIM_RENDER_INIT((src+__VERTEX_PATH).c_str(),(src+__FRAGMENT_PATH).c_str(),{"myColor","windSize","coordMode","drawImage","ourTexture","transCoords","allowTrans"});
+    __FGE_PRIM_RENDER_INIT(__VERTEX_PATH,__FRAGMENT_PATH,{"myColor","windSize","coordMode","drawImage","ourTexture","transCoords","allowTrans"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0)
     .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0).seti("allowTrans",0)
-    .setf("transCoords",1,0,0,1);
+    .setf("transCoords",1,0,0,0,1,0);
 
     FGE_RENDER_SMOOTH();
 }
-inline void FGE_SetPosTransMatrix(float a11, float a12, float a21, float a22)noexcept
+inline void FGE_SetPosTransMatrix(float a11, float a12, float a13, float a21, float a22, float a23)noexcept
 {
-    __fge_primitive_uniform_sys.setf("transCoords",a11,a12,a21,a22);
+    __fge_primitive_uniform_sys.setf("transCoords",a11,a12,a13, a21,a22,a23);
 }
 inline void FGE_AllowTransform()noexcept
 {
@@ -386,6 +384,10 @@ inline void FGE_UseAbsoluteCoords()noexcept
 inline void FGE_SetColor(const FGE_Color& col)noexcept
 {
  __fge_primitive_uniform_sys.setf("myColor",__FGE_EXPAND_COLOR_STRUCT(col));
+}
+inline void FGE_SetColor(float r, float g, float b, float a)noexcept
+{
+ __fge_primitive_uniform_sys.setf("myColor",r,g,b,a);
 }
 inline void FGE_SetClearColor(const FGE_Color& col)noexcept
 {

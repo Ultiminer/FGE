@@ -45,9 +45,9 @@ inline fge_texture get_font_texture(const std::string& font_name, const FONT_SIZ
     fge_texture retVal{path.c_str()};
     return retVal;
 }
-inline void render_text(const std::string& txt,const FGE_FRect& label, float char_width, float char_height, const fge_texture& img)noexcept
+inline void render_text(const std::string& txt,const fge_frect& label, float char_width, float char_height, const fge_texture& img)noexcept
 {
-    FGE_FRect dim={label.x,label.y+label.h-char_height, char_width, char_height};
+    fge_frect dim={label.x,label.y+label.h-char_height, char_width, char_height};
 
     for(auto& ch: txt)
     {   
@@ -68,7 +68,7 @@ inline void render_text(const std::string& txt,const FGE_FRect& label, float cha
 
 }
 
-inline void render_text(const std::string& txt,const FGE_FRect& label, float char_width, float char_height, const std::string& font_name, const FONT_SIZE& pt)noexcept
+inline void render_text(const std::string& txt,const fge_frect& label, float char_width, float char_height, const std::string& font_name, const FONT_SIZE& pt)noexcept
 {
     fge_texture img{fge::get_font_texture(font_name, pt)};
     fge::render_text( txt,label,  char_width,  char_height, img );

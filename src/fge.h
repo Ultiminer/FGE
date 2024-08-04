@@ -61,8 +61,8 @@ inline fge_window fge_general_init()noexcept
     fge_set_state(fge_state::RUN);    
     return wind;
 }
-#define fge_loop_start(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.show();__FGE_WINDOW_OBJ__.poll_events(); while(__FGE_WINDOW_OBJ__.is_running()>0&&__fge_state==fge_state::RUN){__FGE_WINDOW_OBJ__.poll_events(); FGE_START_RENDER();
-#define fge_loop_end(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.swap();}FGE_PRIM_RENDER_DELETE();fge_set_state(fge_state::EXIT);
+#define fge_start(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.show();__FGE_WINDOW_OBJ__.poll_events(); while(__FGE_WINDOW_OBJ__.is_running()>0&&__fge_state==fge_state::RUN){__FGE_WINDOW_OBJ__.poll_events(); FGE_START_RENDER();
+#define fge_end(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.swap();}FGE_PRIM_RENDER_DELETE();fge_set_state(fge_state::EXIT);
 #define fge_return()   return (int)fge_get_state(); 
 
 #endif

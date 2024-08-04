@@ -41,7 +41,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 namespace fge{
-inline void fill_rect(const FGE_FRect& rect)noexcept
+inline void fill_rect(const fge_frect& rect)noexcept
 {
     float vertices[]={rect.x,rect.y,
     rect.x+rect.w,rect.y, 
@@ -50,7 +50,7 @@ inline void fill_rect(const FGE_FRect& rect)noexcept
     rect.x,rect.y};
     __FGE_PRIM_RENDER_FILL_SHAPE(vertices,5);
 }
-inline void draw_rect(const FGE_FRect& rect)noexcept
+inline void draw_rect(const fge_frect& rect)noexcept
 {
     float vertices[]={rect.x,rect.y,
     rect.x+rect.w,rect.y, 
@@ -59,20 +59,20 @@ inline void draw_rect(const FGE_FRect& rect)noexcept
     rect.x,rect.y};
     __FGE_PRIM_RENDER_DRAW_SHAPE(vertices,5);
 }
-inline void draw_line(const FGE_Line& line)noexcept
+inline void draw_line(const fge_line& line)noexcept
 {
     float vertices[]={line.x1,line.y1,line.x2,line.y2};
     __FGE_PRIM_RENDER_DRAW_LINE(vertices,2);
 }
-inline void draw_lines(const std::vector<FGE_Line>& lines)noexcept
+inline void draw_lines(const std::vector<fge_line>& lines)noexcept
 {
     __FGE_PRIM_RENDER_DRAW_LINE((float*)lines.data(),2*lines.size());
 }
-inline void draw_line_strip(const std::vector<FGE_FPoint>& points)noexcept
+inline void draw_line_strip(const std::vector<fge_fpoint>& points)noexcept
 {
     __FGE_PRIM_RENDER_DRAW_SHAPE((float*)points.data(),points.size());
 }
-inline void fill_shape(const std::vector<FGE_FPoint>& points)noexcept
+inline void fill_shape(const std::vector<fge_fpoint>& points)noexcept
 {
     __FGE_PRIM_RENDER_FILL_SHAPE((float*)points.data(),points.size());
 }
@@ -117,8 +117,8 @@ inline circle_s& set_y(float Y)noexcept{y=Y;return *this;}
 inline circle_s& set_r(float R)noexcept{r=R;return *this;}
 inline circle_s& shift_x(float dx)noexcept{x+=dx;return *this;}
 inline circle_s& shift_y(float dy)noexcept{y+=dy;return *this;}
-inline circle_s& lerp(const FGE_FPoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
-inline circle_s& smoothstep(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
+inline circle_s& lerp(const fge_fpoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
+inline circle_s& smoothstep(const fge_fpoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
 
 inline float get_x()const noexcept{return x;}
 inline float get_y()const noexcept{return y;}
@@ -167,8 +167,8 @@ inline ellipse_s& set_angle(float ANGLE)noexcept{angle=ANGLE; return *this;}
 inline ellipse_s& shift_x(float dx)noexcept{x+=dx;return *this;}
 inline ellipse_s& shift_y(float dy)noexcept{y+=dy;return *this;}
 inline ellipse_s& rotate(float dTheta)noexcept{angle+=dTheta;return *this;}
-inline ellipse_s& lerp(const FGE_FPoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
-inline ellipse_s& smoothstep(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
+inline ellipse_s& lerp(const fge_fpoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
+inline ellipse_s& smoothstep(const fge_fpoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
 
 
 inline float get_x()const noexcept{return x;}
@@ -201,7 +201,7 @@ inline void draw()const noexcept
 {
     __FGE_PRIM_RENDER_FILL_SHAPE((float*)vertices.data(),5);
 }
-inline rect_s& set_rect(const FGE_FRect& RECT)
+inline rect_s& set_rect(const fge_frect& RECT)
 {
 xm=RECT.x;
 ym=RECT.y;
@@ -229,15 +229,15 @@ inline rect_s& set_ym(float YM)noexcept{ym=YM; return*this;}
 inline rect_s& set_w2(float W2)noexcept{w2=W2; return*this;}
 inline rect_s& set_h2(float H2)noexcept{h2=H2; return*this;}
 inline rect_s& set_angle(float ANGLE)noexcept{angle=ANGLE; return*this;}
-inline FGE_FRect& get_rect()noexcept
+inline fge_frect& get_rect()noexcept
 {
-    return (FGE_FRect&)*this;
+    return (fge_frect&)*this;
 }
 inline rect_s& shift_x(float dx)noexcept{xm+=dx;return *this;}
 inline rect_s& shift_y(float dy)noexcept{ym+=dy;return *this;}
 inline rect_s& rotate(float dTheta)noexcept{angle+=dTheta;return *this;}
-inline rect_s& lerp(const FGE_FPoint& p, float lerpRate=0.01){xm+=lerpRate*(p.x-xm);ym+=lerpRate*(p.y-ym);return *this;}
-inline rect_s& smoothstep(const FGE_FPoint& p, float stepRate=0.04){xm+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-xm))*(p.x-xm);ym+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-ym))*(p.y-ym);return *this;}
+inline rect_s& lerp(const fge_fpoint& p, float lerpRate=0.01){xm+=lerpRate*(p.x-xm);ym+=lerpRate*(p.y-ym);return *this;}
+inline rect_s& smoothstep(const fge_fpoint& p, float stepRate=0.04){xm+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-xm))*(p.x-xm);ym+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-ym))*(p.y-ym);return *this;}
 
 inline float get_xm()const noexcept{return xm;}
 inline float get_ym()const noexcept{return ym;}
@@ -286,8 +286,8 @@ inline squircle_s& set_angle(float ANGLE)noexcept{angle=ANGLE;return *this;}
 inline squircle_s& shift_x(float dx)noexcept{x+=dx;return *this;}
 inline squircle_s& shift_y(float dy)noexcept{y+=dy;return *this;}
 inline squircle_s& rotate(float dTheta)noexcept{angle+=dTheta;return *this;}
-inline squircle_s& lerp(const FGE_FPoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
-inline squircle_s& smoothstep(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
+inline squircle_s& lerp(const fge_fpoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
+inline squircle_s& smoothstep(const fge_fpoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
 
 inline float get_x()const noexcept{return x;}
 inline float get_y()const noexcept{return y;}
@@ -299,9 +299,9 @@ inline float get_angle()const noexcept{return angle;}
 class triangle_s
 {
 public: 
-FGE_FPoint a,b,c;
+fge_fpoint a,b,c;
 triangle_s(){}
-triangle_s(const FGE_FPoint& A, const FGE_FPoint& B, const FGE_FPoint& C ):a(A),b(B),c(C){}
+triangle_s(const fge_fpoint& A, const fge_fpoint& B, const fge_fpoint& C ):a(A),b(B),c(C){}
 inline std::array<float,6> get_vertices()const noexcept
 {
     return {a.x,a.y,b.x,b.y,c.x,c.y};
@@ -327,13 +327,13 @@ inline triangle_s& draw(const fge_color& color)noexcept
     fge::set_color(color);
     return draw();
 }
-inline triangle_s& set_a(const FGE_FPoint& A)noexcept{a=A;return *this;}
-inline triangle_s& set_b(const FGE_FPoint& B)noexcept{b=B;return *this;}
-inline triangle_s& set_c(const FGE_FPoint& C)noexcept{c=C;return *this;}
+inline triangle_s& set_a(const fge_fpoint& A)noexcept{a=A;return *this;}
+inline triangle_s& set_b(const fge_fpoint& B)noexcept{b=B;return *this;}
+inline triangle_s& set_c(const fge_fpoint& C)noexcept{c=C;return *this;}
 
-inline FGE_FPoint get_a()const noexcept{return a;}
-inline FGE_FPoint get_b()const noexcept{return b;}
-inline FGE_FPoint get_c()const noexcept{return c;}
+inline fge_fpoint get_a()const noexcept{return a;}
+inline fge_fpoint get_b()const noexcept{return b;}
+inline fge_fpoint get_c()const noexcept{return c;}
 };
 class plus_s
 {
@@ -375,8 +375,8 @@ inline plus_s& SetY(float Y)noexcept{y=Y;return *this;}
 inline plus_s& SetL(float L)noexcept{l=L;return *this;}
 inline plus_s& ShiftX(float dx)noexcept{x+=dx;return *this;}
 inline plus_s& ShiftY(float dy)noexcept{y+=dy;return *this;}
-inline plus_s& LERP(const FGE_FPoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
-inline plus_s& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
+inline plus_s& LERP(const fge_fpoint& p, float lerpRate=0.01){x+=lerpRate*(p.x-x);y+=lerpRate*(p.y-y);return *this;}
+inline plus_s& SMOOTHSTEP(const fge_fpoint& p, float stepRate=0.04){x+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-x))*(p.x-x);y+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-y))*(p.y-y);return *this;}
 
 inline float GetX()const noexcept{return x;}
 inline float GetY()const noexcept{return y;}
@@ -435,7 +435,7 @@ inline void Draw()const noexcept
 {
     __FGE_PRIM_RENDER_FILL_SHAPE((float*)vertices.data(),vertices.size()/2);
 }
-inline SRoundedRect& SetRect(const FGE_FRect& RECT)
+inline SRoundedRect& SetRect(const fge_frect& RECT)
 {
 xm=RECT.x;
 ym=RECT.y;
@@ -470,8 +470,8 @@ return*this;}
 inline SRoundedRect& ShiftX(float dx)noexcept{xm+=dx;return *this;}
 inline SRoundedRect& ShiftY(float dy)noexcept{ym+=dy;return *this;}
 inline SRoundedRect& Rotate(float dTheta)noexcept{angle+=dTheta;return *this;}
-inline SRoundedRect& LERP(const FGE_FPoint& p, float lerpRate=0.01){xm+=lerpRate*(p.x-xm);ym+=lerpRate*(p.y-ym);return *this;}
-inline SRoundedRect& SMOOTHSTEP(const FGE_FPoint& p, float stepRate=0.04){xm+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-xm))*(p.x-xm);ym+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-ym))*(p.y-ym);return *this;}
+inline SRoundedRect& LERP(const fge_fpoint& p, float lerpRate=0.01){xm+=lerpRate*(p.x-xm);ym+=lerpRate*(p.y-ym);return *this;}
+inline SRoundedRect& SMOOTHSTEP(const fge_fpoint& p, float stepRate=0.04){xm+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.x-xm))*(p.x-xm);ym+=SHAPE_SMOOTHSTEP(stepRate*QM::tanh(p.y-ym))*(p.y-ym);return *this;}
 
 inline float GetXM()const noexcept{return xm;}
 inline float GetYM()const noexcept{return ym;}

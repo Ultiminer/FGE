@@ -68,7 +68,7 @@ glBindTexture(GL_TEXTURE_2D,id);
 
 };
 
-constexpr std::array<float,16> __MakeImageVerticies(const FGE_FRect& rect,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+constexpr std::array<float,16> __MakeImageVerticies(const fge_frect& rect,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
     return {rect.x,rect.y+rect.h,xOffset,yOffset+heightPercentage,rect.x+rect.w,rect.y+rect.h,xOffset+widthPercentage,yOffset+heightPercentage,rect.x+rect.w,rect.y,xOffset+widthPercentage,yOffset,rect.x,rect.y,xOffset,yOffset};
 }
@@ -78,7 +78,7 @@ constexpr std::array<float,16> __MakeImageVerticies(const fge::rect_s& rect,floa
     return {el[0],el[1],xOffset,yOffset+heightPercentage,el[2],el[3],xOffset+widthPercentage,yOffset+heightPercentage,el[4],el[5],xOffset+widthPercentage,yOffset,el[6],el[7],xOffset,yOffset};
 }
 namespace fge{
-inline void draw_image(const FGE_FRect& rect,  const fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+inline void draw_image(const fge_frect& rect,  const fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
 
     __fge_primitive_uniform_sys.seti("ourTexture",0).seti("drawImage",1);
@@ -105,12 +105,12 @@ inline void draw_image(const FGE_FRect& rect,  const fge_texture& texture,float 
 
 inline void draw_image(float x, float y, float w , float h,  fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
-const FGE_FRect dummy{x,y,w,h};
+const fge_frect dummy{x,y,w,h};
 draw_image(dummy,texture,widthPercentage,heightPercentage,xOffset,yOffset);
 }
 
 
-inline void draw_alpha(const FGE_FRect& rect,  const fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+inline void draw_alpha(const fge_frect& rect,  const fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
 
     __fge_primitive_uniform_sys.seti("ourTexture",0).seti("drawImage",2);

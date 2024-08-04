@@ -35,34 +35,34 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-inline enum class FGE_STATE{
+inline enum class fge_state{
 EXCEPT_ERROR=EXIT_FAILURE,
 EXIT=EXIT_SUCCESS,
 RUN
 }__fge_state;
 
-inline void FGE_SetState(const FGE_STATE& state)noexcept
+inline void fge_set_state(const fge_state& state)noexcept
 {   
     __fge_state=state; 
 }
-inline FGE_STATE FGE_GetState()noexcept
+inline fge_state fge_get_state()noexcept
 {   
     return __fge_state;  
 }
-inline FGE::Window FGE_General_Init()noexcept
+inline fge_window fge_general_init()noexcept
 {
-    FGE::Window wind=FGE::Window();
+    fge_window wind=fge_window();
      //Initializing FGE functionality
-    FGE_INIT_RENDER_DEFAULT();
-    FGE_RENDER_SMOOTH();
-    FGE_SetClearColor(FGE::lightpink|FGE::black);
-    FGE_SendWindowSize(wind.GetWidth(),wind.GetHeight());
-    FGE_UseAbsoluteCoords();
-    FGE_SetState(FGE_STATE::RUN);    
+    fge::init_render_default();
+    fge::render_smooth();
+    fge::set_clear_color(fge::lightpink|fge::black);
+    fge::send_window_size(wind.get_width(),wind.get_height());
+    fge::use_absolute_coords();
+    fge_set_state(fge_state::RUN);    
     return wind;
 }
-#define FGE_Loop_Start(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.Show();__FGE_WINDOW_OBJ__.PollEvents(); while(__FGE_WINDOW_OBJ__.IsRunning()>0&&__fge_state==FGE_STATE::RUN){__FGE_WINDOW_OBJ__.PollEvents(); FGE_START_RENDER();
-#define FGE_Loop_End(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.Swap();}FGE_PRIM_RENDER_DELETE();FGE_SetState(FGE_STATE::EXIT);
-#define FGE_Return()   return (int)FGE_GetState(); 
+#define fge_loop_start(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.show();__FGE_WINDOW_OBJ__.poll_events(); while(__FGE_WINDOW_OBJ__.is_running()>0&&__fge_state==fge_state::RUN){__FGE_WINDOW_OBJ__.poll_events(); FGE_START_RENDER();
+#define fge_loop_end(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.swap();}FGE_PRIM_RENDER_DELETE();fge_set_state(fge_state::EXIT);
+#define fge_return()   return (int)fge_get_state(); 
 
 #endif

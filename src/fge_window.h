@@ -44,18 +44,16 @@ Sets up an OPENGL CONEXT using SDL2
 #define __FGE_WINDOWSIZE_TITLE "Default Window"
 #endif
 
-namespace FGE
-{
 
 
-class Window{
+class fge_window{
 public:
 LeanWindow* window=nullptr; 
 private:
 
 LeanEvent* ev;
 int wWidth=0, wHeight=0;
-size_t currTime=FGE_CurrentMilliseconds();
+size_t currTime=fge_current_milliseconds();
 size_t deltaTime=50;
 private: 
 inline void Init(const char* title, int width, int height, int flags=0)noexcept
@@ -67,28 +65,28 @@ inline void Init(const char* title, int width, int height, int flags=0)noexcept
     ev=LeanCreateEvent();
 }
 public:
-inline Window(const char* title, int width, int height, int flags=0)
+inline fge_window(const char* title, int width, int height, int flags=0)
 { 
     Init(title,width,height,flags);
 }
-inline Window()
+inline fge_window()
 {
     Init(__FGE_WINDOWSIZE_TITLE,__FGE_WINDOWSIZE_WIDTH,__FGE_WINDOWSIZE_HEIGHT);
 }
-inline ~Window()
+inline ~fge_window()
 {
     LeanDestroyWindow(window);
     LeanDestroyEvent(ev);
 }
-inline Window& SetViewport(float x, float y, float w, float h)
+inline fge_window& set_viewport(float x, float y, float w, float h)
 {
 glViewport(x,y,w,h);
 return *this; 
 }
 
-inline int IsRunning()
+inline int is_running()
 {
-    deltaTime=FGE_CurrentMilliseconds()-currTime;
+    deltaTime=fge_current_milliseconds()-currTime;
 
     /*
     Polling size change events from the WIN32 APi 
@@ -101,47 +99,51 @@ inline int IsRunning()
     {
     wWidth=nWidth;
     wHeight=nHeight;
-    FGE_SendWindowSize(wWidth,wHeight);
+    fge::send_window_size(wWidth,wHeight);
     }
     }
 
     #ifndef FGE_NO_VSYNC
-    while(1000/(1+deltaTime)>__FGE_FPS_CAP){deltaTime=FGE_CurrentMilliseconds()-currTime;Sleep(5);}
+    Sleep(2);
+    while(1000/(1+deltaTime)>__FGE_FPS_CAP){deltaTime=fge_current_milliseconds()-currTime;}
+    #else 
+    deltaTime=fge_current_milliseconds()-currTime;
     #endif
-
-    currTime=FGE_CurrentMilliseconds();
+    
+    currTime=fge_current_milliseconds();
    
     return ev->update();
 }
-inline void PollEvents()noexcept
+inline fge_window& poll_events()noexcept
 {
     ev->poll();
+    return *this;
 }
-inline size_t GetDeltaTime()const noexcept
+inline size_t get_delta_time()const noexcept
 {
     return deltaTime; 
 }
-inline size_t GetFPS()const noexcept
+inline size_t get_fps()const noexcept
 {
     return 1000/(1+deltaTime); 
 }
-inline bool KeyDown(int key)
+inline bool key_down(int key)
 {
     return ev->code==LEAN_KEYDOWN&&ev->key==key;
 }
-inline bool KeyUp(int key)
+inline bool key_up(int key)
 {
      return ev->code==LEAN_KEYUP&&ev->key==key;
 }
-inline int GetWidth()
+inline int get_width()
 {
     return wWidth; 
 }
-inline int GetHeight()
+inline int get_height()
 {
     return wHeight; 
 }
-inline Window& GetCursor(int&x , int& y)
+inline fge_window& get_cursor(int&x , int& y)
 {  
     LeanGetCursor(window,x,y);
     /*Changing the coordinates from top-left to centered*/
@@ -149,18 +151,19 @@ inline Window& GetCursor(int&x , int& y)
     y=wHeight/2-y;
     return* this;   
 }
-inline Window& Swap()
+inline fge_window& swap()
 {
     LeanSwapBuffers(window);
     return *this;
 }
-inline bool LeftClick()
+inline bool left_click()
 {
 return ev->code==LEAN_BUTTONDOWN&&ev->button==LEAN_BUTTON_LEFT;
 }
-inline void Show()noexcept
+inline fge_window& show()noexcept
 {
     LeanShowWindow(window);
+    return *this;
 }
 
 
@@ -169,7 +172,6 @@ inline void Show()noexcept
 
 
 
-}
 
 
 

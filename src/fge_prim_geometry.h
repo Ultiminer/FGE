@@ -21,7 +21,7 @@ constexpr float __FGE_PRIMITIVE_PRELOAD_FANCY_ARROW_VERTICES[]={-__FGE_W16,-1,__
 constexpr unsigned int __FGE_PRIMITIVE_PRELOAD_FANCY_ARROW_INDICES[]={0,1,2,0,2,3,4,5,7,5,6,7};
 
 
-namespace FGE{
+namespace fge{
 constexpr float SHAPE_SMOOTHSTEP(float x)
 {
     if(x>0.8)return 1; 

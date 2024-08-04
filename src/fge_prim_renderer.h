@@ -51,8 +51,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #else 
 #define __FRAGMENT_PATH "shader/default_fragment.glsl"
 #endif
-
-
+#ifdef SRC_PATH
+#define __SRC_PATH SRC_PATH
+#else 
+#define __SRC_PATH ""
+#endif
 
 #define __FGE_EXPAND_COLOR_STRUCT(__COLOR_STRUCT__)(float)__COLOR_STRUCT__.r,(float)__COLOR_STRUCT__.g,(float)__COLOR_STRUCT__.b,(float)__COLOR_STRUCT__.a
 #define FGE_START_RENDER() glClear(GL_COLOR_BUFFER_BIT)
@@ -161,12 +164,15 @@ glEnableVertexAttribArray(index);
 
 inline void __FGE_PRIM_RENDER_INIT(const char* vertexSrc, const char* fragmentSrc, const std::vector<const char*>& uniformArgs )noexcept
 {
+    const std::string addVertexSrc=__SRC_PATH+(std::string)""+vertexSrc;
+    const std::string addFragmentSrc=__SRC_PATH+(std::string)""+fragmentSrc;
+
     glGenBuffers(1,&__fge_primitive_renderer.vertexBuffer);
     glGenBuffers(1,&__fge_primitive_renderer.elementBuffer);
     glGenVertexArrays(1,&__fge_primitive_renderer.vertexArray);
 
     unsigned int vertexId=glCreateShader(GL_VERTEX_SHADER);
-    std::string retVal=__FGE_PRIMITIVE_GetShaderSrc(vertexSrc);
+    std::string retVal=__FGE_PRIMITIVE_GetShaderSrc(addVertexSrc.c_str());
     const char* Ssource=retVal.c_str();
     glShaderSource(vertexId, 1, &Ssource, NULL);
     glCompileShader(vertexId);
@@ -184,7 +190,7 @@ inline void __FGE_PRIM_RENDER_INIT(const char* vertexSrc, const char* fragmentSr
     #endif
 
     unsigned int fragmentId=glCreateShader(GL_FRAGMENT_SHADER);
-    retVal=__FGE_PRIMITIVE_GetShaderSrc(fragmentSrc);
+    retVal=__FGE_PRIMITIVE_GetShaderSrc(addFragmentSrc.c_str());
     Ssource=retVal.c_str();
     glShaderSource(fragmentId, 1, &Ssource, NULL);
     glCompileShader(fragmentId);
@@ -270,6 +276,7 @@ inline void __FGE_PRIM_RENDER_DRAW_LINE(float* data, size_t Size,GLenum usage=GL
     glUseProgram(__fge_primitive_renderer.shaderProgram);
     glDrawArrays(GL_LINES,0,Size);
 }
+
 inline void __FGE_PRIM_RENDER_FILL_TRIANGLE(float* data, size_t Size,GLenum usage=GL_DYNAMIC_DRAW)noexcept 
 {
     glBindVertexArray(__fge_primitive_renderer.vertexArray);
@@ -337,9 +344,9 @@ inline void __FGE_PRIM_RENDER_DRAW_FANCY_ARROW(GLenum usage=GL_DYNAMIC_DRAW)noex
     glUseProgram(__fge_primitive_renderer.shaderProgram);
     glDrawArrays(GL_LINE_STRIP,0,8);
 }
+namespace fge{
 
-
-inline void FGE_RENDER_SMOOTH()
+inline void render_smooth()
 {
     glEnable( GL_LINE_SMOOTH );
     glEnable(GL_BLEND);
@@ -347,51 +354,55 @@ inline void FGE_RENDER_SMOOTH()
 }
 
 
-inline void FGE_INIT_RENDER_DEFAULT()
+inline void init_render_default()
 {
     __FGE_PRIM_RENDER_INIT(__VERTEX_PATH,__FRAGMENT_PATH,{"myColor","windSize","coordMode","drawImage","ourTexture","transCoords","allowTrans"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0)
     .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0).seti("allowTrans",0)
     .setf("transCoords",1,0,0,0,1,0);
 
-    FGE_RENDER_SMOOTH();
+    fge::render_smooth();
 }
-inline void FGE_SetPosTransMatrix(float a11, float a12, float a13, float a21, float a22, float a23)noexcept
+inline void set_pos_trans_matrix(float a11, float a12, float a13, float a21, float a22, float a23)noexcept
 {
     __fge_primitive_uniform_sys.setf("transCoords",a11,a12,a13, a21,a22,a23);
 }
-inline void FGE_AllowTransform()noexcept
+inline void allow_transform()noexcept
 {
 __fge_primitive_uniform_sys.seti("allowTrans",1);
 }
-inline void FGE_DisallowTransform()noexcept
+inline void disallow_transform()noexcept
 {
 __fge_primitive_uniform_sys.seti("allowTrans",0);
 }
-inline void FGE_UseRelativeCoords()noexcept
+inline void use_relative_coords()noexcept
 {
    __fge_primitive_uniform_sys.seti("coordMode",0);
 }
-inline void FGE_SendWindowSize(float winWidth, float winHeight)
+inline void send_window_size(float winWidth, float winHeight)
 {
     glViewport(0,0,winWidth,winHeight);
     __fge_primitive_uniform_sys.setf("windSize",winWidth,winHeight);
 }
-inline void FGE_UseAbsoluteCoords()noexcept
+inline void use_absolute_coords()noexcept
 {
    __fge_primitive_uniform_sys.seti("coordMode",1);
 }
-inline void FGE_SetColor(const FGE_Color& col)noexcept
+
+inline void set_color(const fge_color& col)noexcept
 {
  __fge_primitive_uniform_sys.setf("myColor",__FGE_EXPAND_COLOR_STRUCT(col));
 }
-inline void FGE_SetColor(float r, float g, float b, float a)noexcept
+inline void set_color(float r, float g, float b, float a)noexcept
 {
  __fge_primitive_uniform_sys.setf("myColor",r,g,b,a);
 }
-inline void FGE_SetClearColor(const FGE_Color& col)noexcept
+
+inline void set_clear_color(const fge_color& col)noexcept
 {
     glClearColor(col.r/255.0f,col.g/255.0f,col.b/255.0f,col.a/255.0f);
 }
 
+
+}
 #endif

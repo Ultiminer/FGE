@@ -5,21 +5,24 @@
 #include "src/fge_image.h"
 #include "src/fge_font.h"
 
+using namespace fge; 
+
 
 
 int main(int argc, char** argv)
 {
+    
     //Creating the window context
-    FGE::Window wind= FGE_General_Init();
-    FGE_Texture consolas=FGE_GetFontTexture("Consolas", FONT_SIZE::pt60);
+    fge_window wind= fge_general_init();
+    fge_texture consolas=get_font_texture("Consolas", FONT_SIZE::pt60);
 
-    const size_t time_init=FGE_CurrentMilliseconds();
-    FGE_Loop_Start(wind);
+    const size_t time_init=fge_current_milliseconds();
+    fge_loop_start(wind);
 
-    FGE_SetColor(FGE::chocolate);
-    FGE_RenderText("Current time:"+std::to_string((FGE_CurrentMilliseconds()-time_init)/1000.f),{-250,-50,500,40},18,40,consolas);
-    FGE_Loop_End(wind);
+    set_color(chocolate);
+    render_text("Current time:"+std::to_string((fge_current_milliseconds()-time_init)/1000.f),{-250,-50,500,40},18,40,consolas);
+    fge_loop_end(wind);
     
 
-    FGE_Return();
+    fge_return();
 }

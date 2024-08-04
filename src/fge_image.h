@@ -8,14 +8,14 @@
 #include "fge_types.h"
 #include "fge_shape.h"
 
-struct FGE_Texture
+struct fge_texture
 {
 unsigned int id=0; 
 int width=0;
 int height=0; 
 int channelNum=0; 
-FGE_Texture(){}
-FGE_Texture(const char* path)
+fge_texture(){}
+fge_texture(const char* path)
 {
 glGenTextures(1, &id);
 glBindTexture(GL_TEXTURE_2D, id);
@@ -37,7 +37,7 @@ glGenerateMipmap(GL_TEXTURE_2D);
 stbi_image_free(data);
 
 }
-FGE_Texture(const char* path,GLint formatA,GLint formatB)
+fge_texture(const char* path,GLint formatA,GLint formatB)
 {
 glGenTextures(1, &id);
 glBindTexture(GL_TEXTURE_2D, id);
@@ -61,7 +61,7 @@ inline void bind()const
 glActiveTexture(GL_TEXTURE0);
 glBindTexture(GL_TEXTURE_2D,id);
 }
-~FGE_Texture()
+~fge_texture()
 {
     glDeleteTextures(1,&id);    
 }
@@ -72,12 +72,13 @@ constexpr std::array<float,16> __MakeImageVerticies(const FGE_FRect& rect,float 
 {
     return {rect.x,rect.y+rect.h,xOffset,yOffset+heightPercentage,rect.x+rect.w,rect.y+rect.h,xOffset+widthPercentage,yOffset+heightPercentage,rect.x+rect.w,rect.y,xOffset+widthPercentage,yOffset,rect.x,rect.y,xOffset,yOffset};
 }
-constexpr std::array<float,16> __MakeImageVerticies(const FGE::SRect& rect,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+constexpr std::array<float,16> __MakeImageVerticies(const fge::rect_s& rect,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
     const auto el=rect.vertices; 
     return {el[0],el[1],xOffset,yOffset+heightPercentage,el[2],el[3],xOffset+widthPercentage,yOffset+heightPercentage,el[4],el[5],xOffset+widthPercentage,yOffset,el[6],el[7],xOffset,yOffset};
 }
-inline void FGE_DrawImage(const FGE_FRect& rect,  const FGE_Texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+namespace fge{
+inline void draw_image(const FGE_FRect& rect,  const fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
 
     __fge_primitive_uniform_sys.seti("ourTexture",0).seti("drawImage",1);
@@ -102,14 +103,14 @@ inline void FGE_DrawImage(const FGE_FRect& rect,  const FGE_Texture& texture,flo
     glDisableVertexAttribArray(1);
 }
 
-inline void FGE_DrawImage(float x, float y, float w , float h,  FGE_Texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+inline void draw_image(float x, float y, float w , float h,  fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
 const FGE_FRect dummy{x,y,w,h};
-FGE_DrawImage(dummy,texture,widthPercentage,heightPercentage,xOffset,yOffset);
+draw_image(dummy,texture,widthPercentage,heightPercentage,xOffset,yOffset);
 }
 
 
-inline void FGE_DrawAlpha(const FGE_FRect& rect,  const FGE_Texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
+inline void draw_alpha(const FGE_FRect& rect,  const fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
 
     __fge_primitive_uniform_sys.seti("ourTexture",0).seti("drawImage",2);
@@ -134,4 +135,6 @@ inline void FGE_DrawAlpha(const FGE_FRect& rect,  const FGE_Texture& texture,flo
     glDisableVertexAttribArray(1);
 }
 
+
+}
 #endif

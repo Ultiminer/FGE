@@ -13,7 +13,7 @@ int x; int y; int w; int h;
 struct FGE_FRect{
 float x; float y; float w; float h; 
 };
-struct FGE_Color{
+struct fge_color{
 unsigned char r; unsigned char g; unsigned char b;unsigned char a; 
 };
 struct FGE_Circle{float x; float y; float r;};

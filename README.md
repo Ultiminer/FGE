@@ -13,9 +13,8 @@
 ## Newly added features
 * Monospaced font rendering with costumary colors
 ## What is planned?
-* TTF support
+* Screenshot function
 * SVG support
-* GUI framework
 ## What happens to my compilation time, that is not best practice, you should require people to link
 * We live in times where people use TypeScript and happily wait for 10 seconds, just to get js code, I think people will survive 3 seconds of compilation time
 ## Eyes are open for more contributors

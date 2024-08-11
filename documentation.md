@@ -20,6 +20,9 @@
 ## fge_line 
 * fge_line(float x1, float y1, float x2, float y2)
 * A container of four floats and two points representing a straight line
+## fge_texture 
+fge_texture(const char* path)
+holds image data
 # Classes 
 ## fge_window 
 * fge_window(const char* title, int width, int height, int flags=0)
@@ -46,3 +49,4 @@
 * wheel_release() returns true if the wheel mouse button got released
 * get_wheel_delta() returns an int every time the mouse wheel is rotated the describes the rotation orientation minus-> down, plus-> up
 * show() tells WIN32 to show the window
+## 

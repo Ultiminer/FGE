@@ -2,7 +2,7 @@
 ## What is FGE
 * It is a 2D graphics library that can be used for games, guis and applications
 * It is a small wrapper around OpenGL and allows you to easily interopt with the graphics card
-* It is really simple to include into any existing projects, because its header only
+* It is really simple to include into any existing projects, because its header only (provides no extra linking overhead)
 * It has a very small byte-size, because I only use SimpleOpenGlLoader and stb_image as external libraries
 ## Version Info
 * I switched from GLAD to SimpleOpenGlLoader, since I wanted to make this library header-only for simpler use
@@ -11,7 +11,7 @@
 * At the moment only windows plattforms and Opengl-Version >4.5 are supported by this library (which are almost all windows plattforms)
 * To build, simply include src/fge.h and you are finished (gcc requires the flags -lopengl32 -lGdi32 -municode)
 * Either MINGW should be installed/linked or the dll's corresponding to opengl32, Gdi32 and unicode, windows machines should have those libraries pre-installed though
-* No external linking is required though, and it should actually work out of the box with any normal setup
+* No external linking is required though, and it should actually work out of the box with any normal setup and obviously with visual studio IDE, since the dlls are linked per default there
 ## Newly added features
 * Monospaced font rendering with costumary colors
 ## What is planned?

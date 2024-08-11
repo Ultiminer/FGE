@@ -49,4 +49,6 @@ holds image data
 * wheel_release() returns true if the wheel mouse button got released
 * get_wheel_delta() returns an int every time the mouse wheel is rotated the describes the rotation orientation minus-> down, plus-> up
 * show() tells WIN32 to show the window
+* get_screen(int& w,int& h) puts width and height of entire screen as integers into w, h
+* get_time_since_start() returns the time in milliseconds since the application initialized
 ## 

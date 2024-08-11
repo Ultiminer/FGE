@@ -10,10 +10,11 @@
 ## How To Build
 * At the moment only windows plattforms and Opengl-Version >4.5 are supported by this library (which are almost all windows plattforms)
 * To build, simply include src/fge.h and you are finished (gcc requires the flags -lopengl32 -lGdi32 -municode)
+## Newly added features
+* Monospaced font rendering with costumary colors
 ## What is planned?
-* TTF support
+* Screenshot function
 * SVG support
-* GUI framework
 ## What happens to my compilation time, that is not best practice, you should require people to link
 * We live in times where people use TypeScript and happily wait for 10 seconds, just to get js code, I think people will survive 3 seconds of compilation time
 ## Eyes are open for more contributors

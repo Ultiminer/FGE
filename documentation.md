@@ -40,4 +40,9 @@
 * swap() Swaps the window buffer
 * left_click() returns true, if the left mouse button got clicked
 * right_click() returns true if the right mouse button got clicked
+* wheel_click() returns true if the wheel mouse button got clicked
+* left_release() returns true if the left mouse button got released
+* right_release() returns true if the right mouse button got released
+* wheel_release() returns true if the wheel mouse button got released
+
 * show() tells WIN32 to show the window

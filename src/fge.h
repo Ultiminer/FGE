@@ -3,6 +3,9 @@
 #include "fge_window.h"
 #include "fge_shape.h"
 #include "fge_color.h"
+#include "fge_image.h"
+#include "fge_font.h"
+
 /*
 BSD 3-Clause License
 
@@ -53,11 +56,11 @@ inline fge_window fge_general_init()noexcept
 {
     fge_window wind=fge_window();
      //Initializing FGE functionality
-    fge::init_render_default();
-    fge::render_smooth();
-    fge::set_clear_color(fge::lightpink|fge::black);
-    fge::send_window_size(wind.get_width(),wind.get_height());
-    fge::use_absolute_coords();
+    fge_init_render_default();
+    fge_render_smooth();
+    fge_set_clear_color(fge::lightpink|fge::black);
+    fge_send_window_size(wind.get_width(),wind.get_height());
+    fge_use_absolute_coords();
     fge_set_state(fge_state::RUN);    
     return wind;
 }

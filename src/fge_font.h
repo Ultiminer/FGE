@@ -34,8 +34,7 @@ inline std::string __FONT_SIZE_TO_PATH_NAME(const FONT_SIZE& s)noexcept
 
     return "";
 }
-namespace fge{
-inline fge_texture get_font_texture(const std::string& font_name, const FONT_SIZE& pt)noexcept
+inline fge_texture fge_get_font_texture(const std::string& font_name, const FONT_SIZE& pt)noexcept
 {
     const std::string src=__SRC_PATH;
     constexpr const char* path_head="../font/";
@@ -45,7 +44,7 @@ inline fge_texture get_font_texture(const std::string& font_name, const FONT_SIZ
     fge_texture retVal{path.c_str()};
     return retVal;
 }
-inline void render_text(const std::string& txt,const fge_frect& label, float char_width, float char_height, const fge_texture& img)noexcept
+inline void fge_render_text(const std::string& txt,const fge_frect& label, float char_width, float char_height, const fge_texture& img)noexcept
 {
     fge_frect dim={label.x,label.y+label.h-char_height, char_width, char_height};
 
@@ -60,7 +59,7 @@ inline void render_text(const std::string& txt,const fge_frect& label, float cha
         if(ch=='\n')continue;
         //Draw to screen if not bad character
         if(ch>32&&ch<177)
-        fge::draw_alpha(dim,img,FGE_FONTPOS_MULTIPLIER,FGE_FONTPOS_H,1.009f*(ch-33)*FGE_FONTPOS_MULTIPLIER,FGE_FONTPOS_Y_NORM);
+        fge_draw_alpha(dim,img,FGE_FONTPOS_MULTIPLIER,FGE_FONTPOS_H,1.009f*(ch-33)*FGE_FONTPOS_MULTIPLIER,FGE_FONTPOS_Y_NORM);
         
         //Advance character pointer
         dim.x+=char_width;
@@ -68,12 +67,11 @@ inline void render_text(const std::string& txt,const fge_frect& label, float cha
 
 }
 
-inline void render_text(const std::string& txt,const fge_frect& label, float char_width, float char_height, const std::string& font_name, const FONT_SIZE& pt)noexcept
+inline void fge_render_text(const std::string& txt,const fge_frect& label, float char_width, float char_height, const std::string& font_name, const FONT_SIZE& pt)noexcept
 {
-    fge_texture img{fge::get_font_texture(font_name, pt)};
-    fge::render_text( txt,label,  char_width,  char_height, img );
+    fge_texture img{fge_get_font_texture(font_name, pt)};
+    fge_render_text( txt,label,  char_width,  char_height, img );
 }
 
-}
 
 #endif

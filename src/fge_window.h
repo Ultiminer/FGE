@@ -99,7 +99,7 @@ inline int is_running()
     {
     wWidth=nWidth;
     wHeight=nHeight;
-    fge::send_window_size(wWidth,wHeight);
+    fge_send_window_size(wWidth,wHeight);
     }
     }
 

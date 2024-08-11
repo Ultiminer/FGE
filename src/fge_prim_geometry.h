@@ -21,8 +21,7 @@ constexpr float __FGE_PRIMITIVE_PRELOAD_FANCY_ARROW_VERTICES[]={-__FGE_W16,-1,__
 constexpr unsigned int __FGE_PRIMITIVE_PRELOAD_FANCY_ARROW_INDICES[]={0,1,2,0,2,3,4,5,7,5,6,7};
 
 
-namespace fge{
-constexpr float SHAPE_SMOOTHSTEP(float x)
+constexpr float fge_shape_smoothstep(float x)
 {
     if(x>0.8)return 1; 
     if(x<-0.8)return -1; 
@@ -31,7 +30,7 @@ constexpr float SHAPE_SMOOTHSTEP(float x)
 /*REMARK: Maybe vectorize in the future*/
 /*Vertices should only be transformed when parameters change, so there is performance gained by doing static transformations outside of the shader*/
 template <size_t S>
-constexpr std::array<float,S> TransformVertices(const float* const vertices, float xShift, float yShift=0, float widthMultiplier=1, float heightMultiplier=1, float rotateAngle=0)noexcept
+constexpr std::array<float,S> fge_transform_vertices(const float* const vertices, float xShift, float yShift=0, float widthMultiplier=1, float heightMultiplier=1, float rotateAngle=0)noexcept
 {
     //Error ! Can not be 2d vectorized - contradicts underlying assumption
     if(S%2!=0)exit(-1);
@@ -61,7 +60,7 @@ constexpr std::array<float,S> TransformVertices(const float* const vertices, flo
     return retValue; 
 } 
 
-}
+
 
 
 #endif

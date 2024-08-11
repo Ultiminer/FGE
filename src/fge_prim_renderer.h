@@ -344,9 +344,9 @@ inline void __FGE_PRIM_RENDER_DRAW_FANCY_ARROW(GLenum usage=GL_DYNAMIC_DRAW)noex
     glUseProgram(__fge_primitive_renderer.shaderProgram);
     glDrawArrays(GL_LINE_STRIP,0,8);
 }
-namespace fge{
 
-inline void render_smooth()
+
+inline void fge_render_smooth()
 {
     glEnable( GL_LINE_SMOOTH );
     glEnable(GL_BLEND);
@@ -354,55 +354,55 @@ inline void render_smooth()
 }
 
 
-inline void init_render_default()
+inline void fge_init_render_default()
 {
     __FGE_PRIM_RENDER_INIT(__VERTEX_PATH,__FRAGMENT_PATH,{"myColor","windSize","coordMode","drawImage","ourTexture","transCoords","allowTrans"});
     __fge_primitive_uniform_sys.setf("myColor",0,0,0,0)
     .setf("windSize",800,600).seti("coordMode",0).seti("drawImage",0).seti("ourTexture",0).seti("allowTrans",0)
     .setf("transCoords",1,0,0,0,1,0);
 
-    fge::render_smooth();
+    fge_render_smooth();
 }
-inline void set_pos_trans_matrix(float a11, float a12, float a13, float a21, float a22, float a23)noexcept
+inline void fge_set_pos_trans_matrix(float a11, float a12, float a13, float a21, float a22, float a23)noexcept
 {
     __fge_primitive_uniform_sys.setf("transCoords",a11,a12,a13, a21,a22,a23);
 }
-inline void allow_transform()noexcept
+inline void fge_allow_transform()noexcept
 {
 __fge_primitive_uniform_sys.seti("allowTrans",1);
 }
-inline void disallow_transform()noexcept
+inline void fge_disallow_transform()noexcept
 {
 __fge_primitive_uniform_sys.seti("allowTrans",0);
 }
-inline void use_relative_coords()noexcept
+inline void fge_use_relative_coords()noexcept
 {
    __fge_primitive_uniform_sys.seti("coordMode",0);
 }
-inline void send_window_size(float winWidth, float winHeight)
+inline void fge_send_window_size(float winWidth, float winHeight)
 {
     glViewport(0,0,winWidth,winHeight);
     __fge_primitive_uniform_sys.setf("windSize",winWidth,winHeight);
 }
-inline void use_absolute_coords()noexcept
+inline void fge_use_absolute_coords()noexcept
 {
    __fge_primitive_uniform_sys.seti("coordMode",1);
 }
 
-inline void set_color(const fge_color& col)noexcept
+inline void fge_set_color(const fge_color& col)noexcept
 {
  __fge_primitive_uniform_sys.setf("myColor",__FGE_EXPAND_COLOR_STRUCT(col));
 }
-inline void set_color(float r, float g, float b, float a)noexcept
+inline void fge_set_color(float r, float g, float b, float a)noexcept
 {
  __fge_primitive_uniform_sys.setf("myColor",r,g,b,a);
 }
 
-inline void set_clear_color(const fge_color& col)noexcept
+inline void fge_set_clear_color(const fge_color& col)noexcept
 {
     glClearColor(col.r/255.0f,col.g/255.0f,col.b/255.0f,col.a/255.0f);
 }
 
 
-}
+
 #endif

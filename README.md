@@ -10,6 +10,8 @@
 ## How To Build
 * At the moment only windows plattforms and Opengl-Version >4.5 are supported by this library (which are almost all windows plattforms)
 * To build, simply include src/fge.h and you are finished (gcc requires the flags -lopengl32 -lGdi32 -municode)
+* Either MINGW should be installed/linked or the dll's corresponding to opengl32, Gdi32 and unicode, windows machines should have those libraries pre-installed though
+* No external linking is required though, and it should actually work out of the box with any normal setup
 ## Newly added features
 * Monospaced font rendering with costumary colors
 ## What is planned?

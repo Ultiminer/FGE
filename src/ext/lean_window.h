@@ -324,5 +324,9 @@ inline bool LeanSwapBuffers(LeanWindow*wnd)noexcept
      wnd->hdc
     );
 }
-
+inline void LeanGetMetrics(int& w, int& h)noexcept
+{
+    w=GetSystemMetrics(SM_CXSCREEN);
+    h=GetSystemMetrics(SM_CYSCREEN);
+}
 #endif

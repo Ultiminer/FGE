@@ -55,6 +55,7 @@ LeanEvent* ev;
 int wWidth=0, wHeight=0;
 size_t currTime=fge_current_milliseconds();
 size_t deltaTime=50;
+const size_t initTime=fge_current_milliseconds();;
 private: 
 inline void Init(const char* title, int width, int height, int flags=0)noexcept
 {
@@ -127,23 +128,23 @@ inline size_t get_fps()const noexcept
 {
     return 1000/(1+deltaTime); 
 }
-inline bool key_down(int key)
+inline bool key_down(int key)noexcept
 {
     return ev->code==LEAN_KEYDOWN&&ev->key==key;
 }
-inline bool key_up(int key)
+inline bool key_up(int key)noexcept
 {
      return ev->code==LEAN_KEYUP&&ev->key==key;
 }
-inline int get_width()
+inline int get_width()noexcept
 {
     return wWidth; 
 }
-inline int get_height()
+inline int get_height()noexcept
 {
     return wHeight; 
 }
-inline fge_window& get_cursor(int&x , int& y)
+inline fge_window& get_cursor(int&x , int& y)noexcept
 {  
     LeanGetCursor(window,x,y);
     /*Changing the coordinates from top-left to centered*/
@@ -151,36 +152,36 @@ inline fge_window& get_cursor(int&x , int& y)
     y=wHeight/2-y;
     return* this;   
 }
-inline fge_window& swap()
+inline fge_window& swap()noexcept
 {
     LeanSwapBuffers(window);
     return *this;
 }
-inline bool left_click()
+inline bool left_click()const noexcept
 {
 return ev->code==LEAN_LBUTTONDOWN;
 }
-inline bool right_click()
+inline bool right_click()const noexcept
 {
 return ev->code==LEAN_RBUTTONDOWN;
 }
-inline bool wheel_click()
+inline bool wheel_click()const noexcept
 {
 return ev->code==LEAN_MBUTTONDOWN;
 }
-inline bool left_release()
+inline bool left_release()const noexcept
 {
 return ev->code==LEAN_LBUTTONUP;
 }
-inline bool right_release()
+inline bool right_release()const noexcept
 {
 return ev->code==LEAN_RBUTTONUP;
 }
-inline bool wheel_release()
+inline bool wheel_release()const noexcept
 {
 return ev->code==LEAN_MBUTTONUP;
 }
-inline int get_wheel_delta()
+inline int get_wheel_delta()const noexcept
 {
    return GET_WHEEL_DELTA_WPARAM(ev->wParam);
 }
@@ -190,15 +191,19 @@ inline fge_window& show()noexcept
     LeanShowWindow(window);
     return *this;
 }
-
-
+inline fge_window& get_screen(int & w, int& h) noexcept
+{
+    LeanGetMetrics(w,h);
+    return *this;
+}
+inline int get_time_since_start()const noexcept
+{
+    return fge_current_milliseconds()-initTime; 
+}
+inline void get_screen(int & w, int& h)const noexcept
+{
+    LeanGetMetrics(w,h);
+}
 };
-
-
-
-
-
-
-
 
 #endif

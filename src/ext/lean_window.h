@@ -67,8 +67,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 
 inline struct LeanEvent
 {
-    uint8_t button; 
     int key; 
+    unsigned int wParam; 
     MSG msg; 
     uint32_t code;
     inline int update()noexcept
@@ -82,10 +82,12 @@ inline struct LeanEvent
     }
 }__lean_event;
 #define LEAN_BUTTONDOWN WM_LBUTTONDOWN
-#define LEAN_BUTTONUP WM_LBUTTONUP
-#define LEAN_BUTTON_LEFT MK_LBUTTON
-#define LEAN_BUTTON_RIGHT MK_RBUTTON
-#define LEAN_BUTTON_MIDDLE MK_MBUTTON
+#define LEAN_LBUTTONUP WM_LBUTTONUP
+#define LEAN_LBUTTONDOWN WM_LBUTTONDOWN
+#define LEAN_RBUTTONUP WM_RBUTTONUP
+#define LEAN_RBUTTONDOWN WM_RBUTTONDOWN
+#define LEAN_MBUTTONUP WM_MBUTTONUP
+#define LEAN_MBUTTONDOWN WM_MBUTTONDOWN
 #define LEAN_KEYDOWN WM_KEYDOWN
 #define LEAN_KEYUP WM_KEYUP
 
@@ -93,8 +95,8 @@ inline struct LeanEvent
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     {
+    __lean_event.wParam=wParam;
     __lean_event.code=uMsg;
-    __lean_event.button = GET_XBUTTON_WPARAM(wParam);  
     __lean_event.key=   GET_KEYSTATE_WPARAM(wParam);
     }
     switch (uMsg)

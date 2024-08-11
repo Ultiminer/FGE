@@ -158,8 +158,33 @@ inline fge_window& swap()
 }
 inline bool left_click()
 {
-return ev->code==LEAN_BUTTONDOWN&&ev->button==LEAN_BUTTON_LEFT;
+return ev->code==LEAN_LBUTTONDOWN;
 }
+inline bool right_click()
+{
+return ev->code==LEAN_RBUTTONDOWN;
+}
+inline bool wheel_click()
+{
+return ev->code==LEAN_MBUTTONDOWN;
+}
+inline bool left_release()
+{
+return ev->code==LEAN_LBUTTONUP;
+}
+inline bool right_release()
+{
+return ev->code==LEAN_RBUTTONUP;
+}
+inline bool wheel_release()
+{
+return ev->code==LEAN_MBUTTONUP;
+}
+inline int get_wheel_delta()
+{
+   return GET_WHEEL_DELTA_WPARAM(ev->wParam);
+}
+
 inline fge_window& show()noexcept
 {
     LeanShowWindow(window);

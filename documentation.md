@@ -44,5 +44,5 @@
 * left_release() returns true if the left mouse button got released
 * right_release() returns true if the right mouse button got released
 * wheel_release() returns true if the wheel mouse button got released
-
+* get_wheel_delta() returns an int every time the mouse wheel is rotated the describes the rotation orientation minus-> down, plus-> up
 * show() tells WIN32 to show the window

@@ -52,17 +52,17 @@ inline fge_state fge_get_state()noexcept
 {   
     return __fge_state;  
 }
-inline fge_window fge_general_init()noexcept
+inline fge_window& fge_general_init(const char* title="Default window", int w=0, int h=0)noexcept
 {
-    fge_window wind=fge_window();
+    fge_window* wind=((w==0||h==0)?(new fge_window(title,__FGE_WINDOWSIZE_WIDTH,__FGE_WINDOWSIZE_HEIGHT)):(new fge_window(title,w,h)));
      //Initializing FGE functionality
     fge_init_render_default();
     fge_render_smooth();
     fge_set_clear_color(fge::lightpink|fge::black);
-    fge_send_window_size(wind.get_width(),wind.get_height());
+    fge_send_window_size(wind->get_width(),wind->get_height());
     fge_use_absolute_coords();
     fge_set_state(fge_state::RUN);    
-    return wind;
+    return *wind;
 }
 #define fge_start(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.show();__FGE_WINDOW_OBJ__.poll_events(); while(__FGE_WINDOW_OBJ__.is_running()>0&&__fge_state==fge_state::RUN){__FGE_WINDOW_OBJ__.poll_events(); FGE_START_RENDER();
 #define fge_end(__FGE_WINDOW_OBJ__)__FGE_WINDOW_OBJ__.swap();}FGE_PRIM_RENDER_DELETE();fge_set_state(fge_state::EXIT);

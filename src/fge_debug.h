@@ -24,12 +24,13 @@ constexpr inline void fge_fun_assert(bool eval, const char* const expr, const ch
 
 
 #ifdef FGE_Active
-#define FGE_EXIT(msg) 
+#define FGE_EXIT(msg) (msg)
 #define fge_assert(expr) (expr)
-
+#define fge_debug_print(x) (x)
 #else
 #define FGE_EXIT(msg) {{std::cout<<msg<<std::endl; std::cout.flush(); exit(EXIT_FAILURE);}}
 #define fge_assert(expr) fge_fun_assert((expr),#expr,__FILE__,__LINE__)
+#define fge_debug_print(x) std::cout<<x<<"\n"<<std::flush;
 
 #endif
 

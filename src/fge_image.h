@@ -30,7 +30,8 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 stbi_set_flip_vertically_on_load(true);  
 unsigned char *data= stbi_load((path), &width, &height, &channelNum, 0);
 
-if (data==nullptr) FGE_EXIT("Image path"<<path<<"was nonexistent-> exit!");
+fge_assert(data!=nullptr);
+
 const GLint format= (channelNum==4)?GL_RGBA:GL_RGB;
 glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 glGenerateMipmap(GL_TEXTURE_2D);
@@ -49,11 +50,12 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 stbi_set_flip_vertically_on_load(true);  
 unsigned char *data= stbi_load((path), &width, &height, &channelNum, 0);
-if (data==nullptr) FGE_EXIT("Image path"<<path<<"was nonexistent-> exit!");
+
+fge_assert(data!=nullptr);
+
 glTexImage2D(GL_TEXTURE_2D, 0, formatA, width, height, 0, formatB, GL_UNSIGNED_BYTE, data);
 glGenerateMipmap(GL_TEXTURE_2D);
 stbi_image_free(data);
-
 }
 
 inline void bind()const 
@@ -80,7 +82,6 @@ constexpr std::array<float,16> __MakeImageVerticies(const fge_rect_s& rect,float
 
 inline void fge_draw_image(const fge_frect& rect,  const fge_texture& texture,float widthPercentage=1,float heightPercentage=1, float xOffset=0,float yOffset=0)
 {
-
     __fge_primitive_uniform_sys.seti("ourTexture",0).seti("drawImage",1);
     const size_t indicesSize{6};
     const auto verticies=__MakeImageVerticies(rect,widthPercentage,heightPercentage,xOffset,yOffset);
